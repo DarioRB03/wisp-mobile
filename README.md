@@ -1,50 +1,47 @@
-# Welcome to your Expo app 👋
+# Wisp Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Habla. Publica.**
 
-## Get started
+Wisp Mobile es la versión nativa de Wisp: convierte notas de voz en contenido listo para publicar en redes, usando IA, directamente desde tu móvil. Graba una idea suelta mientras caminas, mientras conduces, o simplemente cuando te venga a la cabeza — Wisp la transcribe, la transforma en el formato y tono que elijas, y aprende tu estilo con el tiempo según qué posts marques como útiles.
 
-1. Install dependencies
+Comparte backend y base de datos con la versión web de Wisp, así que tu historial, tu perfil y tu racha son los mismos entres ambas plataformas.
 
-   ```bash
-   npm install
-   ```
+## Cómo funciona
 
-2. Start the app
+1. Grabas una nota de voz (o escribes/editas la transcripción antes de continuar)
+2. Eliges uno de los tres modos de generación:
+   - **Estándar** — genera tres variantes con distinto tono: reflexivo, directo y cercano
+   - **Tono personalizado** — describes tú mismo el tono que quieres, y Wisp lo respeta
+   - **Comparativa** — genera la misma idea adaptada a 2-3 formatos distintos a la vez, para comparar lado a lado
+3. Eliges el formato de destino (LinkedIn, X, Instagram, TikTok, YouTube o email)
+4. Copias el resultado, lo abres directamente en la app/web de destino, o lo guardas en tu historial
+5. Marcas si un post te resultó útil o no — Wisp usa esa señal para priorizar ejemplos de tu propio estilo en generaciones futuras
 
-   ```bash
-   npx expo start
-   ```
+## Funcionalidades adicionales
 
-In the output, you'll find options to open the app in a
+- **Racha diaria** — genera contenido en días consecutivos para desbloquear generaciones extra cada semana
+- **Perfil de contexto** — cuéntale a Wisp a qué te dedicas, y lo tendrá en cuenta al generar contenido
+- **Guardado de borrador** — si cierras la app a medio grabar, recuperas el texto donde lo dejaste
+- **Historial con feedback** — marca posts como útiles, y bórralos si ya no los necesitas
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Stack técnico
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+**Frontend (móvil)**
 
-## Get a fresh project
+- Expo + React Native + TypeScript
+- Expo Router (navegación basada en archivos)
+- `expo-audio` (grabación de audio nativa)
+- Supabase Auth (autenticación, compartida con la web)
+- Arquitectura en componentes con tema centralizado (`constants/theme.ts`)
 
-When you're ready, run:
+**Backend** (compartido con la versión web, repositorio [`wisp`](https://github.com/DarioRB03/wisp))
 
-```bash
-npm run reset-project
-```
+- Python + FastAPI
+- Arquitectura en capas: `routers`, `services`, `models`, `prompts`, `database`, `auth`
+- Anthropic Claude API (generación de contenido)
+- OpenAI Whisper (transcripción de audio)
+- Verificación de JWT vía JWKS de Supabase
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+**Base de datos**
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- PostgreSQL (Supabase), con Row Level Security por usuario
