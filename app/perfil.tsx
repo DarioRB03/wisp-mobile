@@ -1,10 +1,13 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { guardarPerfil, obtenerPerfil } from "../lib/api";
 
 export default function Perfil() {
+    const { t } = useTranslation();
+
     const [contexto, setContexto] = useState("");
     const [cargando, setCargando] = useState(true);
     const [guardando, setGuardando] = useState(false);
@@ -14,7 +17,7 @@ export default function Perfil() {
     useEffect(() => {
         obtenerPerfil()
             .then(setContexto)
-            .catch(() => setError("No se pudo cargar tu perfil."))
+            .catch(() => setError(t("perfil.errorCargar")))
             .finally(() => setCargando(false));
     }, []);
 
@@ -26,7 +29,7 @@ export default function Perfil() {
             await guardarPerfil(contexto);
             setGuardado(true);
         } catch (err) {
-            setError("No se pudo guardar el perfil.");
+            setError(t("perfil.errorGuardar"));
         } finally {
             setGuardando(false);
         }
@@ -36,16 +39,14 @@ export default function Perfil() {
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.enlace}>← Volver</Text>
+                    <Text style={styles.enlace}>{t("comun.volver")}</Text>
                 </TouchableOpacity>
-                <Text style={styles.titulo}>Tu perfil</Text>
+                <Text style={styles.titulo}>{t("perfil.titulo")}</Text>
                 <View style={{ width: 50 }} />
             </View>
 
             <View style={styles.contenido}>
-                <Text style={styles.descripcion}>
-                    Cuéntanos a qué te dedicas y qué buscas conseguir. Wisp usará esto para ajustar el contenido a tu perfil.
-                </Text>
+                <Text style={styles.descripcion}>{t("perfil.descripcion")}</Text>
 
                 {cargando ? (
                     <ActivityIndicator color={COLORES.accentCool} style={{ marginTop: ESPACIADO.lg }} />
@@ -55,7 +56,7 @@ export default function Perfil() {
                             style={styles.input}
                             value={contexto}
                             onChangeText={setContexto}
-                            placeholder="Ej: Soy desarrollador backend pivotando hacia AI Engineering..."
+                            placeholder={t("perfil.placeholder")}
                             placeholderTextColor={COLORES.textMuted}
                             multiline
                         />
@@ -64,7 +65,7 @@ export default function Perfil() {
                             {guardando ? (
                                 <ActivityIndicator color="white" />
                             ) : (
-                                <Text style={styles.botonTexto}>{guardado ? "Guardado ✓" : "Guardar perfil"}</Text>
+                                <Text style={styles.botonTexto}>{guardado ? t("comun.guardado") : t("perfil.guardar")}</Text>
                             )}
                         </TouchableOpacity>
                     </>

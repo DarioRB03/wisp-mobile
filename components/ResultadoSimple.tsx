@@ -1,8 +1,9 @@
 import * as Clipboard from "expo-clipboard";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
-import { DESTINOS, copiarYAbrir } from "../lib/destinos";
+import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 
 type Props = {
     post: string;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function ResultadoSimple({ post, formato, onGuardar }: Props) {
+    const { t } = useTranslation();
     const [guardado, setGuardado] = useState(false);
     const [copiado, setCopiado] = useState(false);
 
@@ -34,7 +36,7 @@ export default function ResultadoSimple({ post, formato, onGuardar }: Props) {
             </View>
 
             <TouchableOpacity style={[styles.boton, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
-                <Text style={styles.botonTexto}>{copiado ? "Copiado ✓" : "Copiar esta versión"}</Text>
+                <Text style={styles.botonTexto}>{copiado ? t("comun.copiado") : t("comun.copiar")}</Text>
             </TouchableOpacity>
 
             {destino && (
@@ -42,7 +44,7 @@ export default function ResultadoSimple({ post, formato, onGuardar }: Props) {
                     style={[styles.boton, { backgroundColor: COLORES.surface, borderWidth: 1, borderColor: COLORES.border }]}
                     onPress={() => copiarYAbrir(formato, post)}
                 >
-                    <Text style={styles.botonTexto}>{destino.etiqueta}</Text>
+                    <Text style={styles.botonTexto}>{etiquetaDestino(formato, t)}</Text>
                 </TouchableOpacity>
             )}
 
@@ -51,7 +53,7 @@ export default function ResultadoSimple({ post, formato, onGuardar }: Props) {
                 onPress={guardar}
                 disabled={guardado}
             >
-                <Text style={styles.botonTexto}>{guardado ? "Guardado ✓" : "Guardar en historial"}</Text>
+                <Text style={styles.botonTexto}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </TouchableOpacity>
         </View>
     );

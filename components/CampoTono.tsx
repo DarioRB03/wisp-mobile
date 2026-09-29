@@ -1,4 +1,5 @@
-import { StyleSheet, TextInput } from "react-native";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 
 type Props = {
@@ -7,25 +8,31 @@ type Props = {
 };
 
 export default function CampoTono({ tono, onCambiar }: Props) {
+    const { t } = useTranslation();
+
     return (
-        <TextInput
-            style={styles.input}
-            placeholder="¿Con qué tono? Ej: sarcástico, cercano..."
-            placeholderTextColor={COLORES.textMuted}
-            value={tono}
-            onChangeText={onCambiar}
-        />
+        <View style={styles.contenedor}>
+            <Text style={styles.etiqueta}>{t("tono.etiqueta")}</Text>
+            <TextInput
+                style={styles.input}
+                placeholder={t("tono.placeholder")}
+                placeholderTextColor={COLORES.textMuted}
+                value={tono}
+                onChangeText={onCambiar}
+            />
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
+    contenedor: { width: "100%", marginTop: ESPACIADO.md, gap: ESPACIADO.xs },
+    etiqueta: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.pequeno },
     input: {
         width: "100%",
         borderWidth: 1,
         borderColor: COLORES.border,
         borderRadius: RADIOS.sm,
         padding: ESPACIADO.md,
-        marginTop: ESPACIADO.md,
         color: COLORES.text,
         fontSize: TIPOGRAFIA.cuerpo,
     },

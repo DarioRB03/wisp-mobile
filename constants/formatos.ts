@@ -7,8 +7,3 @@ export const FORMATOS = [
     { valor: "email", etiqueta: "Email" },
 ];
 
-export const MODOS = [
-    { valor: "estandar", etiqueta: "Estándar" },
-    { valor: "personalizado", etiqueta: "Tono" },
-    { valor: "comparativa", etiqueta: "Comparativa" },
-];

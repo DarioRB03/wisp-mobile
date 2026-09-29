@@ -1,8 +1,9 @@
 import * as Clipboard from "expo-clipboard";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
-import { DESTINOS, copiarYAbrir } from "../lib/destinos";
+import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 import SelectorPill from "./SelectorPill";
 
 type Variante = { tono: string; post: string };
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export default function ResultadoEstandar({ variantes, formato, onGuardar }: Props) {
+    const { t } = useTranslation();
     const [activa, setActiva] = useState(0);
     const [guardado, setGuardado] = useState(false);
     const [copiado, setCopiado] = useState(false);
@@ -37,7 +39,7 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
                 {variantes.map((v, i) => (
                     <SelectorPill
                         key={v.tono}
-                        etiqueta={v.tono}
+                        etiqueta={t(`tonos.${v.tono}`, { defaultValue: v.tono })}
                         activo={activa === i}
                         onPress={() => {
                             setActiva(i);
@@ -46,12 +48,13 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
                     />
                 ))}
             </View>
+
             <View style={styles.caja}>
                 <Text style={styles.texto}>{variantes[activa].post}</Text>
             </View>
 
             <TouchableOpacity style={[styles.boton, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
-                <Text style={styles.botonTexto}>{copiado ? "Copiado ✓" : "Copiar esta versión"}</Text>
+                <Text style={styles.botonTexto}>{copiado ? t("comun.copiado") : t("comun.copiar")}</Text>
             </TouchableOpacity>
 
             {destino && (
@@ -59,7 +62,7 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
                     style={[styles.boton, { backgroundColor: COLORES.surface, borderWidth: 1, borderColor: COLORES.border }]}
                     onPress={() => copiarYAbrir(formato, variantes[activa].post)}
                 >
-                    <Text style={styles.botonTexto}>{destino.etiqueta}</Text>
+                    <Text style={styles.botonTexto}>{etiquetaDestino(formato, t)}</Text>
                 </TouchableOpacity>
             )}
 
@@ -68,7 +71,7 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
                 onPress={guardar}
                 disabled={guardado}
             >
-                <Text style={styles.botonTexto}>{guardado ? "Guardado ✓" : "Guardar en historial"}</Text>
+                <Text style={styles.botonTexto}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </TouchableOpacity>
         </View>
     );

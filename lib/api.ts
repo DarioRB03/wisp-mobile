@@ -1,4 +1,5 @@
 import { API_URL } from "./config";
+import i18n from "./i18n";
 import { supabase } from "./supabase";
 
 async function obtenerToken(): Promise<string> {
@@ -15,6 +16,7 @@ export async function transcribirAudio(uri: string): Promise<string> {
         name: "grabacion.m4a",
         type: "audio/m4a",
     } as any);
+    formData.append("idioma", i18n.language);
 
     const response = await fetch(`${API_URL}/transcribir`, {
         method: "POST",
@@ -35,7 +37,7 @@ export async function generarPost(texto: string, formato: string) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ texto, formato }),
+        body: JSON.stringify({ texto, formato, idioma: i18n.language }),
     });
 
     if (!response.ok) {
@@ -46,34 +48,6 @@ export async function generarPost(texto: string, formato: string) {
     return data.variantes;
 }
 
-
-export async function guardarPost(texto: string, post: string, formato: string) {
-    const token = await obtenerToken();
-    const response = await fetch(`${API_URL}/guardar-post`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ texto, post, formato }),
-    });
-    if (!response.ok) {
-        const data = await response.json().catch(() => null);
-        throw new Error(data?.detail || "No se pudo guardar el post");
-    }
-}
-
-export async function obtenerHistorial() {
-    const token = await obtenerToken();
-    const response = await fetch(`${API_URL}/historial`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    if (!response.ok) throw new Error("No se pudo obtener el historial");
-    return response.json();
-}
-
 export async function generarTonoPersonalizado(texto: string, formato: string, tono: string) {
     const token = await obtenerToken();
     const response = await fetch(`${API_URL}/generar-tono-personalizado`, {
@@ -82,7 +56,7 @@ export async function generarTonoPersonalizado(texto: string, formato: string, t
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ texto, formato, tono }),
+        body: JSON.stringify({ texto, formato, tono, idioma: i18n.language }),
     });
 
     if (!response.ok) {
@@ -101,7 +75,7 @@ export async function generarComparativa(texto: string, formatos: string[]) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ texto, formatos }),
+        body: JSON.stringify({ texto, formatos, idioma: i18n.language }),
     });
 
     if (!response.ok) {
@@ -110,6 +84,57 @@ export async function generarComparativa(texto: string, formatos: string[]) {
     }
     const data = await response.json();
     return data.resultados;
+}
+
+export async function guardarPost(texto: string, post: string, formato: string) {
+    const token = await obtenerToken();
+    const response = await fetch(`${API_URL}/guardar-post`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ texto, post, formato, idioma: i18n.language }),
+    });
+
+    if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.detail || "No se pudo guardar el post");
+    }
+}
+
+export async function obtenerHistorial() {
+    const token = await obtenerToken();
+    const response = await fetch(`${API_URL}/historial`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) throw new Error("No se pudo obtener el historial");
+    return response.json();
+}
+
+export async function borrarNota(id: string): Promise<void> {
+    const token = await obtenerToken();
+    const response = await fetch(`${API_URL}/historial/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) throw new Error("No se pudo borrar la nota");
+}
+
+export async function enviarFeedback(id: string, feedback: "positivo" | "negativo"): Promise<void> {
+    const token = await obtenerToken();
+    const response = await fetch(`${API_URL}/historial/${id}/feedback`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ feedback, idioma: i18n.language }),
+    });
+
+    if (!response.ok) throw new Error("No se pudo enviar el feedback");
 }
 
 export async function obtenerUso() {
@@ -145,26 +170,4 @@ export async function guardarPerfil(contexto: string): Promise<void> {
     });
 
     if (!response.ok) throw new Error("No se pudo guardar el perfil");
-}
-
-export async function borrarNota(id: string): Promise<void> {
-    const token = await obtenerToken();
-    const response = await fetch(`${API_URL}/historial/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!response.ok) throw new Error("No se pudo borrar la nota");
-}
-
-export async function enviarFeedback(id: string, feedback: "positivo" | "negativo"): Promise<void> {
-    const token = await obtenerToken();
-    const response = await fetch(`${API_URL}/historial/${id}/feedback`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ feedback }),
-    });
-    if (!response.ok) throw new Error("No se pudo enviar el feedback");
 }

@@ -3,6 +3,7 @@ import type { Session } from "@supabase/supabase-js";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import {
@@ -15,6 +16,7 @@ import {
 } from "../lib/api";
 import { supabase } from "../lib/supabase";
 
+import SelectorIdioma from "@/components/SelectorIdioma";
 import BannerBorrador from "../components/BannerBorrador";
 import CampoTono from "../components/CampoTono";
 import ContadorUso from "../components/ContadorUso";
@@ -62,6 +64,8 @@ export default function Index() {
 }
 
 function PantallaPrincipal() {
+  const { t } = useTranslation();
+
   const [modo, setModo] = useState<Modo>("estandar");
   const [formato, setFormato] = useState("linkedin");
   const [formatosMultiples, setFormatosMultiples] = useState<string[]>(["linkedin", "tiktok"]);
@@ -129,10 +133,14 @@ function PantallaPrincipal() {
     setTranscribiendo(true);
     try {
       const texto = await transcribirAudio(uri);
-      setTranscripcion(texto);
-      setBorradorDisponible(null);
+      if (!texto.trim()) {
+        setError(t("grabador.sinVoz"));
+      } else {
+        setTranscripcion(texto);
+        setBorradorDisponible(null);
+      }
     } catch (err) {
-      setError("No se pudo transcribir el audio.");
+      setError(t("grabador.errorTranscribir"));
     } finally {
       setTranscribiendo(false);
     }
@@ -148,20 +156,20 @@ function PantallaPrincipal() {
         setVariantes(await generarPost(transcripcion, formato));
       } else if (modo === "personalizado") {
         if (!tonoPersonalizado.trim()) {
-          setError("Escribe qué tono quieres antes de generar.");
+          setError(t("generar.errorTono"));
           return;
         }
         setPostSimple(await generarTonoPersonalizado(transcripcion, formato, tonoPersonalizado));
       } else if (modo === "comparativa") {
         if (formatosMultiples.length < 2) {
-          setError("Elige al menos 2 formatos.");
+          setError(t("generar.errorFormatos"));
           return;
         }
         setComparativa(await generarComparativa(transcripcion, formatosMultiples));
       }
       cargarUso();
     } catch (err: any) {
-      setError(err.message || "No se pudo generar el contenido.");
+      setError(err.message || t("generar.errorGenerico"));
     } finally {
       setGenerando(false);
     }
@@ -171,7 +179,7 @@ function PantallaPrincipal() {
     try {
       await guardarPost(transcripcion, post, formatoUsado);
     } catch (err: any) {
-      setError(err.message || "No se pudo guardar.");
+      setError(err.message || t("generar.errorGuardar"));
       throw err;
     }
   }
@@ -183,19 +191,20 @@ function PantallaPrincipal() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContent} style={{ backgroundColor: COLORES.bg }}>
       <View style={styles.centrado}>
-        <Text style={styles.titulo}>Wisp</Text>
-        <Text style={styles.subtitulo}>Habla. Publica.</Text>
+        <Text style={styles.titulo}>{t("app.nombre")}</Text>
+        <Text style={styles.subtitulo}>{t("app.lema")}</Text>
 
-        <View style={styles.filaEnlaces}>
+        <View style={[styles.filaEnlaces, { alignItems: "center" }]}>
           <TouchableOpacity onPress={() => router.push("/historial")}>
-            <Text style={styles.enlace}>Ver historial</Text>
+            <Text style={styles.enlace}>{t("nav.historial")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.push("/perfil")}>
-            <Text style={styles.enlace}>Mi perfil</Text>
+            <Text style={styles.enlace}>{t("nav.perfil")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={cerrarSesion}>
-            <Text style={styles.enlace}>Cerrar sesión</Text>
+            <Text style={styles.enlace}>{t("nav.cerrarSesion")}</Text>
           </TouchableOpacity>
+          <SelectorIdioma />
         </View>
 
         <ContadorUso uso={uso} />
@@ -244,7 +253,7 @@ function PantallaPrincipal() {
               multiline
             />
             <TouchableOpacity style={styles.boton} onPress={generar} disabled={generando}>
-              {generando ? <ActivityIndicator color="white" /> : <Text style={styles.botonTexto}>Generar post</Text>}
+              {generando ? <ActivityIndicator color="white" /> : <Text style={styles.botonTexto}>{t("generar.boton")}</Text>}
             </TouchableOpacity>
           </>
         ) : null}

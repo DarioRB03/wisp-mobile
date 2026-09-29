@@ -1,0 +1,123 @@
+{
+    "app": {
+        "nombre": "Wisp",
+        "lema": "Habla. Publica."
+    },
+    "nav": {
+        "historial": "Ver historial",
+        "perfil": "Mi perfil",
+        "cerrarSesion": "Cerrar sesión"
+    },
+    "comun": {
+        "copiar": "Copiar esta versión",
+        "copiarCorto": "Copiar",
+        "copiarPost": "Copiar post",
+        "copiado": "Copiado ✓",
+        "copiarYAbrir": "Copiar y abrir {{destino}}",
+        "errorCopiar": "No se pudo copiar automáticamente.",
+        "guardar": "Guardar",
+        "guardarHistorial": "Guardar en historial",
+        "guardado": "Guardado ✓",
+        "guardadoHistorial": "Guardado en tu historial ✓",
+        "eliminar": "Eliminar",
+        "borrando": "Borrando...",
+        "cerrar": "Cerrar",
+        "volver": "← Volver",
+        "cargando": "Cargando...",
+        "generando": "Generando..."
+    },
+    "auth": {
+        "login": "Inicia sesión",
+        "registro": "Crea tu cuenta",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "entrar": "Entrar",
+        "registrarme": "Registrarme",
+        "sinCuenta": "¿No tienes cuenta? Regístrate",
+        "conCuenta": "¿Ya tienes cuenta? Inicia sesión",
+        "confirmacion": "Te hemos enviado un correo de confirmación. Revisa tu bandeja de entrada.",
+        "errorGenerico": "Ha ocurrido un error"
+    },
+    "modos": {
+        "estandar": "Estándar",
+        "personalizado": "Tono personalizado",
+        "comparativa": "Comparativa"
+    },
+    "tonos": {
+        "reflexivo": "Reflexivo",
+        "directo": "Directo",
+        "cercano": "Cercano"
+    },
+    "destinos": {
+        "correo": "correo"
+    },
+    "formatos": {
+        "seleccionados": "{{actuales}}/{{max}} seleccionados (mínimo 2 para comparar)"
+    },
+    "tono": {
+        "etiqueta": "¿Con qué tono quieres que suene?",
+        "placeholder": "Ej: sarcástico, cercano pero firme, como un coach motivacional..."
+    },
+    "grabador": {
+        "empezar": "Empezar a grabar",
+        "parar": "Parar grabación",
+        "grabarCorto": "Grabar",
+        "pararCorto": "Parar",
+        "placeholder": "Aquí aparecerá lo que digas...",
+        "transcribiendo": "Transcribiendo tu audio...",
+        "errorMicrofono": "No se pudo acceder al micrófono. Revisa los permisos.",
+        "errorPermiso": "Necesitas dar permiso de micrófono.",
+        "errorIniciar": "No se pudo iniciar la grabación: {{detalle}}",
+        "errorParar": "No se pudo parar la grabación.",
+        "errorTranscribir": "No se pudo transcribir el audio. Inténtalo de nuevo.",
+        "borradorAviso": "Tienes un borrador sin terminar",
+        "recuperar": "Recuperar",
+        "descartar": "Descartar",
+        "sinVoz": "No se ha detectado ninguna voz. Inténtalo de nuevo."
+    },
+    "generar": {
+        "boton": "Generar post",
+        "variantes": "Generando variantes...",
+        "post": "Generando post...",
+        "errorTono": "Escribe qué tono quieres antes de generar.",
+        "errorFormatos": "Elige al menos 2 formatos para comparar.",
+        "errorGenerico": "No se pudo generar el contenido.",
+        "errorGuardar": "No se pudo guardar el post en el historial."
+    },
+    "uso": {
+        "restantes": "{{restantes}} de {{limite}} generaciones restantes este mes"
+    },
+    "racha": {
+        "titulo": "Racha diaria",
+        "explicacion": "Cada día que generes al menos un post, tu racha sube. Si un día no generas nada, vuelve a 0.",
+        "dias_one": "{{count}} día",
+        "dias_other": "{{count}} días",
+        "deRacha_one": "{{count}} día de racha",
+        "deRacha_other": "{{count}} días de racha",
+        "recompensa": "Recompensa",
+        "recompensaTexto": "Cada 7 días seguidos, desbloqueas +5 generaciones extra para ese mes.",
+        "manana": "¡Mañana desbloqueas +5 generaciones!",
+        "faltan": "{{dias}} días para +5 generaciones extra"
+    },
+    "historial": {
+        "titulo": "Historial",
+        "masReciente": "Más reciente",
+        "masAntiguo": "Más antiguo",
+        "todos": "Todos",
+        "sinResultados": "No hay notas con este filtro.",
+        "vacio": "Todavía no has guardado ningún post.",
+        "util": "¿Te resultó útil?",
+        "siUtil": "👍 Útil",
+        "noUtil": "👎 No útil",
+        "errorCargar": "No se pudo cargar el historial."
+    },
+    "perfil": {
+        "titulo": "Tu perfil",
+        "descripcion": "Cuéntanos a qué te dedicas y qué buscas conseguir. Wisp usará esto para ajustar el contenido a tu perfil, sin que tengas que repetirlo cada vez.",
+        "placeholder": "Ej: Soy desarrollador backend pivotando hacia AI Engineering...",
+        "guardar": "Guardar perfil",
+        "guardando": "Guardando...",
+        "errorCargar": "No se pudo cargar tu perfil.",
+        "errorGuardar": "No se pudo guardar el perfil."
+    }
+}

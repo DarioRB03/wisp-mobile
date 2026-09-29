@@ -1,5 +1,6 @@
 import * as Clipboard from "expo-clipboard";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Props) {
+    const { t } = useTranslation();
     const [copiado, setCopiado] = useState(false);
     const [borrando, setBorrando] = useState(false);
     const [feedbackLocal, setFeedbackLocal] = useState<string | null>(null);
@@ -65,7 +67,7 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
                     <View style={styles.header}>
                         <Text style={styles.fecha}>{nota.fecha}</Text>
                         <TouchableOpacity onPress={onCerrar}>
-                            <Text style={styles.enlace}>Cerrar ✕</Text>
+                            <Text style={styles.enlace}>{t("comun.cerrar")} ✕</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -74,13 +76,13 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
                     </ScrollView>
 
                     <View style={styles.filaFeedback}>
-                        <Text style={styles.pregunta}>¿Te resultó útil?</Text>
+                        <Text style={styles.pregunta}>{t("historial.util")}</Text>
                         <TouchableOpacity
                             onPress={() => marcarFeedback("positivo")}
                             style={[styles.chip, feedbackActual === "positivo" && { backgroundColor: COLORES.accentCool, borderColor: COLORES.accentCool }]}
                         >
                             <Text style={{ color: feedbackActual === "positivo" ? "white" : COLORES.textMuted, fontSize: TIPOGRAFIA.minimo }}>
-                                👍 Útil
+                                {t("historial.siUtil")}
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -88,21 +90,23 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
                             style={[styles.chip, feedbackActual === "negativo" && { backgroundColor: COLORES.danger, borderColor: COLORES.danger }]}
                         >
                             <Text style={{ color: feedbackActual === "negativo" ? "white" : COLORES.textMuted, fontSize: TIPOGRAFIA.minimo }}>
-                                👎 No útil
+                                {t("historial.noUtil")}
                             </Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.filaBotones}>
                         <TouchableOpacity style={[styles.boton, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
-                            <Text style={styles.botonTexto}>{copiado ? "Copiado ✓" : "Copiar post"}</Text>
+                            <Text style={styles.botonTexto}>{copiado ? t("comun.copiado") : t("comun.copiarPost")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.boton, { borderWidth: 1, borderColor: COLORES.danger }]}
                             onPress={borrar}
                             disabled={borrando}
                         >
-                            <Text style={[styles.botonTexto, { color: COLORES.danger }]}>{borrando ? "Borrando..." : "Eliminar"}</Text>
+                            <Text style={[styles.botonTexto, { color: COLORES.danger }]}>
+                                {borrando ? t("comun.borrando") : t("comun.eliminar")}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>

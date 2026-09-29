@@ -1,8 +1,9 @@
 import * as Clipboard from "expo-clipboard";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
-import { DESTINOS, copiarYAbrir } from "../lib/destinos";
+import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 
 type Item = { formato: string; post: string };
 
@@ -12,6 +13,7 @@ type Props = {
 };
 
 function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post: string, formato: string) => Promise<void> }) {
+    const { t } = useTranslation();
     const [guardado, setGuardado] = useState(false);
     const [copiado, setCopiado] = useState(false);
 
@@ -34,7 +36,7 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
             <Text style={styles.texto}>{item.post}</Text>
 
             <TouchableOpacity style={[styles.botonPequeno, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
-                <Text style={styles.botonTextoPequeno}>{copiado ? "Copiado ✓" : "Copiar"}</Text>
+                <Text style={styles.botonTextoPequeno}>{copiado ? t("comun.copiado") : t("comun.copiar")}</Text>
             </TouchableOpacity>
 
             {destino && (
@@ -42,7 +44,7 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
                     style={[styles.botonPequeno, { backgroundColor: COLORES.bg, borderWidth: 1, borderColor: COLORES.border }]}
                     onPress={() => copiarYAbrir(item.formato, item.post)}
                 >
-                    <Text style={styles.botonTextoPequeno}>{destino.etiqueta}</Text>
+                    <Text style={styles.botonTextoPequeno}>{etiquetaDestino(item.formato, t)}</Text>
                 </TouchableOpacity>
             )}
 
@@ -51,7 +53,7 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
                 onPress={guardar}
                 disabled={guardado}
             >
-                <Text style={styles.botonTextoPequeno}>{guardado ? "Guardado ✓" : "Guardar"}</Text>
+                <Text style={styles.botonTextoPequeno}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </TouchableOpacity>
         </View>
     );

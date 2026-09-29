@@ -1,10 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { supabase } from "../lib/supabase";
+import SelectorIdioma from "./SelectorIdioma";
 
 export default function PantallaAuth() {
+    const { t } = useTranslation();
     const [modo, setModo] = useState<"login" | "registro">("login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,13 +23,13 @@ export default function PantallaAuth() {
             if (modo === "registro") {
                 const { error, data } = await supabase.auth.signUp({ email, password });
                 if (error) throw error;
-                if (!data.session) setMensaje("Te hemos enviado un correo de confirmación.");
+                if (!data.session) setMensaje(t("auth.confirmacion"));
             } else {
                 const { error } = await supabase.auth.signInWithPassword({ email, password });
                 if (error) throw error;
             }
         } catch (err: any) {
-            setError(err.message || "Ha ocurrido un error");
+            setError(err.message || t("auth.errorGenerico"));
         } finally {
             setCargando(false);
         }
@@ -34,14 +37,17 @@ export default function PantallaAuth() {
 
     return (
         <View style={[styles.container, styles.centrado]}>
-            <Text style={styles.titulo}>Wisp</Text>
-            <Text style={styles.subtitulo}>Habla. Publica.</Text>
+            <View style={{ position: "absolute", top: ESPACIADO.xl, right: ESPACIADO.xl }}>
+                <SelectorIdioma />
+            </View>
+            <Text style={styles.titulo}>{t("app.nombre")}</Text>
+            <Text style={styles.subtitulo}>{t("app.lema")}</Text>
             <Text style={[styles.subtitulo, { marginTop: ESPACIADO.xl, marginBottom: ESPACIADO.md, fontSize: TIPOGRAFIA.subtitulo, color: COLORES.text }]}>
-                {modo === "login" ? "Inicia sesión" : "Crea tu cuenta"}
+                {modo === "login" ? t("auth.login") : t("auth.registro")}
             </Text>
             <TextInput
                 style={styles.input}
-                placeholder="Correo electrónico"
+                placeholder={t("auth.email")}
                 placeholderTextColor={COLORES.textMuted}
                 value={email}
                 onChangeText={setEmail}
@@ -50,7 +56,7 @@ export default function PantallaAuth() {
             />
             <TextInput
                 style={styles.input}
-                placeholder="Contraseña"
+                placeholder={t("auth.password")}
                 placeholderTextColor={COLORES.textMuted}
                 value={password}
                 onChangeText={setPassword}
@@ -62,12 +68,12 @@ export default function PantallaAuth() {
                 {cargando ? (
                     <ActivityIndicator color="white" />
                 ) : (
-                    <Text style={styles.botonTexto}>{modo === "login" ? "Entrar" : "Registrarme"}</Text>
+                    <Text style={styles.botonTexto}>{modo === "login" ? t("auth.entrar") : t("auth.registrarme")}</Text>
                 )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setModo(modo === "login" ? "registro" : "login")}>
                 <Text style={styles.enlace}>
-                    {modo === "login" ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia sesión"}
+                    {modo === "login" ? t("auth.sinCuenta") : t("auth.conCuenta")}
                 </Text>
             </TouchableOpacity>
             <StatusBar style="light" />

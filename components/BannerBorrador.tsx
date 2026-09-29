@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 
@@ -7,15 +8,17 @@ type Props = {
 };
 
 export default function BannerBorrador({ onRecuperar, onDescartar }: Props) {
+    const { t } = useTranslation();
+
     return (
         <View style={styles.contenedor}>
-            <Text style={styles.texto}>Tienes un borrador sin terminar</Text>
+            <Text style={styles.texto}>{t("grabador.borradorAviso")}</Text>
             <View style={styles.acciones}>
                 <TouchableOpacity onPress={onRecuperar}>
-                    <Text style={styles.enlaceAmbar}>Recuperar</Text>
+                    <Text style={styles.enlaceAmbar}>{t("grabador.recuperar")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onDescartar}>
-                    <Text style={styles.enlaceMuted}>Descartar</Text>
+                    <Text style={styles.enlaceMuted}>{t("grabador.descartar")}</Text>
                 </TouchableOpacity>
             </View>
         </View>

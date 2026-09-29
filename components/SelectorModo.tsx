@@ -1,5 +1,5 @@
+import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import { MODOS } from "../constants/formatos";
 import { ESPACIADO } from "../constants/theme";
 import SelectorPill from "./SelectorPill";
 
@@ -10,15 +10,19 @@ type Props = {
     onCambiar: (modo: Modo) => void;
 };
 
+const OPCIONES: Modo[] = ["estandar", "personalizado", "comparativa"];
+
 export default function SelectorModo({ modo, onCambiar }: Props) {
+    const { t } = useTranslation();
+
     return (
         <View style={styles.fila}>
-            {MODOS.map((m) => (
+            {OPCIONES.map((valor) => (
                 <SelectorPill
-                    key={m.valor}
-                    etiqueta={m.etiqueta}
-                    activo={modo === m.valor}
-                    onPress={() => onCambiar(m.valor as Modo)}
+                    key={valor}
+                    etiqueta={t(`modos.${valor}`)}
+                    activo={modo === valor}
+                    onPress={() => onCambiar(valor)}
                 />
             ))}
         </View>
@@ -26,5 +30,5 @@ export default function SelectorModo({ modo, onCambiar }: Props) {
 }
 
 const styles = StyleSheet.create({
-    fila: { flexDirection: "row", gap: ESPACIADO.sm, marginTop: ESPACIADO.xl },
+    fila: { flexDirection: "row", flexWrap: "wrap", gap: ESPACIADO.sm, justifyContent: "center", marginTop: ESPACIADO.xl },
 });

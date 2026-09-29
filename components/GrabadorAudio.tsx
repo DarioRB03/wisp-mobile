@@ -1,5 +1,6 @@
 import { AudioModule, RecordingPresets, setAudioModeAsync, useAudioRecorder } from "expo-audio";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { COLORES, ESPACIADO, TIPOGRAFIA } from "../constants/theme";
 
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, onTranscripcionLista, onError, onEmpezar }: Props) {
+    const { t } = useTranslation();
     const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
 
     useEffect(() => {
@@ -24,7 +26,7 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
         try {
             const permiso = await AudioModule.requestRecordingPermissionsAsync();
             if (!permiso.granted) {
-                onError("Necesitas dar permiso de micrófono.");
+                onError(t("grabador.errorPermiso"));
                 return;
             }
 
@@ -33,7 +35,7 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
             audioRecorder.record();
             onGrabando(true);
         } catch (err: any) {
-            onError("No se pudo iniciar la grabación: " + (err?.message || String(err)));
+            onError(t("grabador.errorIniciar", { detalle: err?.message || String(err) }));
         }
     }
 
@@ -44,20 +46,23 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
             const uri = audioRecorder.uri;
             if (uri) onTranscripcionLista(uri);
         } catch (err) {
-            onError("No se pudo parar la grabación.");
+            onError(t("grabador.errorParar"));
         }
     }
+
+    const etiquetaBoton = grabando ? t("grabador.pararCorto") : t("grabador.grabarCorto");
 
     return (
         <TouchableOpacity
             onPress={grabando ? parar : iniciar}
             disabled={transcribiendo}
+            accessibilityLabel={grabando ? t("grabador.parar") : t("grabador.empezar")}
             style={[styles.boton, { backgroundColor: grabando ? COLORES.danger : COLORES.accentWarm }]}
         >
             {transcribiendo ? (
                 <ActivityIndicator color={COLORES.bg} />
             ) : (
-                <Text style={styles.texto}>{grabando ? "Parar" : "Grabar"}</Text>
+                <Text style={styles.texto}>{etiquetaBoton}</Text>
             )}
         </TouchableOpacity>
     );

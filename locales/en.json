@@ -1,0 +1,123 @@
+{
+    "app": {
+        "nombre": "Wisp",
+        "lema": "Speak. Publish."
+    },
+    "nav": {
+        "historial": "View history",
+        "perfil": "My profile",
+        "cerrarSesion": "Sign out"
+    },
+    "comun": {
+        "copiar": "Copy this version",
+        "copiarCorto": "Copy",
+        "copiarPost": "Copy post",
+        "copiado": "Copied ✓",
+        "copiarYAbrir": "Copy and open {{destino}}",
+        "errorCopiar": "Couldn't copy automatically.",
+        "guardar": "Save",
+        "guardarHistorial": "Save to history",
+        "guardado": "Saved ✓",
+        "guardadoHistorial": "Saved to your history ✓",
+        "eliminar": "Delete",
+        "borrando": "Deleting...",
+        "cerrar": "Close",
+        "volver": "← Back",
+        "cargando": "Loading...",
+        "generando": "Generating..."
+    },
+    "auth": {
+        "login": "Sign in",
+        "registro": "Create your account",
+        "email": "Email",
+        "password": "Password",
+        "entrar": "Sign in",
+        "registrarme": "Sign up",
+        "sinCuenta": "Don't have an account? Sign up",
+        "conCuenta": "Already have an account? Sign in",
+        "confirmacion": "We've sent you a confirmation email. Check your inbox.",
+        "errorGenerico": "Something went wrong"
+    },
+    "modos": {
+        "estandar": "Standard",
+        "personalizado": "Custom tone",
+        "comparativa": "Compare"
+    },
+    "tonos": {
+        "reflexivo": "Reflective",
+        "directo": "Direct",
+        "cercano": "Friendly"
+    },
+    "destinos": {
+        "correo": "email"
+    },
+    "formatos": {
+        "seleccionados": "{{actuales}}/{{max}} selected (minimum 2 to compare)"
+    },
+    "tono": {
+        "etiqueta": "What tone should it have?",
+        "placeholder": "E.g. sarcastic, warm but firm, like a motivational coach..."
+    },
+    "grabador": {
+        "empezar": "Start recording",
+        "parar": "Stop recording",
+        "grabarCorto": "Record",
+        "pararCorto": "Stop",
+        "placeholder": "What you say will appear here...",
+        "transcribiendo": "Transcribing your audio...",
+        "errorMicrofono": "Couldn't access the microphone. Check your permissions.",
+        "errorPermiso": "You need to grant microphone permission.",
+        "errorIniciar": "Couldn't start recording: {{detalle}}",
+        "errorParar": "Couldn't stop recording.",
+        "errorTranscribir": "Couldn't transcribe the audio. Please try again.",
+        "borradorAviso": "You have an unfinished draft",
+        "recuperar": "Restore",
+        "descartar": "Discard",
+        "sinVoz": "No speech detected. Please try again."
+    },
+    "generar": {
+        "boton": "Generate post",
+        "variantes": "Generating variants...",
+        "post": "Generating post...",
+        "errorTono": "Write the tone you want before generating.",
+        "errorFormatos": "Choose at least 2 formats to compare.",
+        "errorGenerico": "Couldn't generate the content.",
+        "errorGuardar": "Couldn't save the post to your history."
+    },
+    "uso": {
+        "restantes": "{{restantes}} of {{limite}} generations left this month"
+    },
+    "racha": {
+        "titulo": "Daily streak",
+        "explicacion": "Every day you generate at least one post, your streak goes up. If you skip a day, it resets to 0.",
+        "dias_one": "{{count}} day",
+        "dias_other": "{{count}} days",
+        "deRacha_one": "{{count}} day streak",
+        "deRacha_other": "{{count}} day streak",
+        "recompensa": "Reward",
+        "recompensaTexto": "Every 7 days in a row, you unlock +5 extra generations for that month.",
+        "manana": "Tomorrow you unlock +5 generations!",
+        "faltan": "{{dias}} days until +5 extra generations"
+    },
+    "historial": {
+        "titulo": "History",
+        "masReciente": "Newest first",
+        "masAntiguo": "Oldest first",
+        "todos": "All",
+        "sinResultados": "No notes match this filter.",
+        "vacio": "You haven't saved any posts yet.",
+        "util": "Was this useful?",
+        "siUtil": "👍 Useful",
+        "noUtil": "👎 Not useful",
+        "errorCargar": "Couldn't load your history."
+    },
+    "perfil": {
+        "titulo": "Your profile",
+        "descripcion": "Tell us what you do and what you want to achieve. Wisp will use this to tailor the content to you, so you don't have to repeat it every time.",
+        "placeholder": "E.g. I'm a backend developer moving into AI Engineering...",
+        "guardar": "Save profile",
+        "guardando": "Saving...",
+        "errorCargar": "Couldn't load your profile.",
+        "errorGuardar": "Couldn't save your profile."
+    }
+}
