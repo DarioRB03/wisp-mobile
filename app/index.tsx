@@ -218,11 +218,13 @@ function PantallaPrincipal() {
           }}
         />
 
-        {modo !== "comparativa" && <SelectorFormato formato={formato} onCambiar={setFormato} />}
-        {modo === "comparativa" && (
-          <SelectorFormatosMultiple seleccionados={formatosMultiples} onCambiar={setFormatosMultiples} />
-        )}
-        {modo === "personalizado" && <CampoTono tono={tonoPersonalizado} onCambiar={setTonoPersonalizado} />}
+        <Fade key={modo} style={{ width: "100%", alignItems: "center" }}>
+          {modo !== "comparativa" && <SelectorFormato formato={formato} onCambiar={setFormato} />}
+          {modo === "comparativa" && (
+            <SelectorFormatosMultiple seleccionados={formatosMultiples} onCambiar={setFormatosMultiples} />
+          )}
+          {modo === "personalizado" && <CampoTono tono={tonoPersonalizado} onCambiar={setTonoPersonalizado} />}
+        </Fade>
 
         {borradorDisponible && (
           <View style={{ width: "100%", marginTop: ESPACIADO.lg }}>
