@@ -10,12 +10,10 @@
     },
     "comun": {
         "copiar": "Copy this version",
-        "copiarCorto": "Copy",
         "copiarPost": "Copy post",
         "copiado": "Copied ✓",
         "copiarYAbrir": "Copy and open {{destino}}",
         "errorCopiar": "Couldn't copy automatically.",
-        "guardar": "Save",
         "guardarHistorial": "Save to history",
         "guardado": "Saved ✓",
         "guardadoHistorial": "Saved to your history ✓",

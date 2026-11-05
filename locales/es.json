@@ -10,12 +10,10 @@
     },
     "comun": {
         "copiar": "Copiar esta versión",
-        "copiarCorto": "Copiar",
         "copiarPost": "Copiar post",
         "copiado": "Copiado ✓",
         "copiarYAbrir": "Copiar y abrir {{destino}}",
         "errorCopiar": "No se pudo copiar automáticamente.",
-        "guardar": "Guardar",
         "guardarHistorial": "Guardar en historial",
         "guardado": "Guardado ✓",
         "guardadoHistorial": "Guardado en tu historial ✓",
