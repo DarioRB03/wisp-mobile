@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
+import BotonConRebote from "./BotonConRebote";
 
 type Item = { formato: string; post: string };
 
@@ -35,9 +36,9 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
             <Text style={styles.etiquetaFormato}>{item.formato.toUpperCase()}</Text>
             <Text style={styles.texto}>{item.post}</Text>
 
-            <TouchableOpacity style={[styles.botonPequeno, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
+            <BotonConRebote style={[styles.botonPequeno, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
                 <Text style={styles.botonTextoPequeno}>{copiado ? t("comun.copiado") : t("comun.copiar")}</Text>
-            </TouchableOpacity>
+            </BotonConRebote>
 
             {destino && (
                 <TouchableOpacity
@@ -48,13 +49,13 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
                 </TouchableOpacity>
             )}
 
-            <TouchableOpacity
+            <BotonConRebote
                 style={[styles.botonPequeno, { backgroundColor: guardado ? COLORES.border : COLORES.accentWarm }]}
                 onPress={guardar}
                 disabled={guardado}
             >
                 <Text style={styles.botonTextoPequeno}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
-            </TouchableOpacity>
+            </BotonConRebote>
         </View>
     );
 }

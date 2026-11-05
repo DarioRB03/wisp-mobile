@@ -20,6 +20,7 @@ import SelectorIdioma from "@/components/SelectorIdioma";
 import BannerBorrador from "../components/BannerBorrador";
 import CampoTono from "../components/CampoTono";
 import ContadorUso from "../components/ContadorUso";
+import Fade from "../components/Fade";
 import GrabadorAudio from "../components/GrabadorAudio";
 import PantallaAuth from "../components/PantallaAuth";
 import ResultadoComparativa from "../components/ResultadoComparativa";
@@ -245,7 +246,7 @@ function PantallaPrincipal() {
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         {transcripcion && !transcribiendo && !grabando ? (
-          <>
+          <Fade style={{ width: "100%" }}>
             <TextInput
               style={[styles.input, { minHeight: 100, marginTop: ESPACIADO.xl - 4 }]}
               value={transcripcion}
@@ -255,17 +256,23 @@ function PantallaPrincipal() {
             <TouchableOpacity style={styles.boton} onPress={generar} disabled={generando}>
               {generando ? <ActivityIndicator color="white" /> : <Text style={styles.botonTexto}>{t("generar.boton")}</Text>}
             </TouchableOpacity>
-          </>
+          </Fade>
         ) : null}
 
         {modo === "estandar" && variantes.length > 0 && (
-          <ResultadoEstandar variantes={variantes} formato={formato} onGuardar={(post) => guardar(post, formato)} />
+          <Fade style={{ width: "100%" }}>
+            <ResultadoEstandar variantes={variantes} formato={formato} onGuardar={(post) => guardar(post, formato)} />
+          </Fade>
         )}
         {modo === "personalizado" && postSimple && (
-          <ResultadoSimple post={postSimple} formato={formato} onGuardar={(post) => guardar(post, formato)} />
+          <Fade style={{ width: "100%" }}>
+            <ResultadoSimple post={postSimple} formato={formato} onGuardar={(post) => guardar(post, formato)} />
+          </Fade>
         )}
         {modo === "comparativa" && comparativa.length > 0 && (
-          <ResultadoComparativa resultados={comparativa} onGuardar={(post, f) => guardar(post, f)} />
+          <Fade style={{ width: "100%" }}>
+            <ResultadoComparativa resultados={comparativa} onGuardar={(post, f) => guardar(post, f)} />
+          </Fade>
         )}
       </View>
       <StatusBar style="light" />

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
+import BotonConRebote from "./BotonConRebote";
 import SelectorPill from "./SelectorPill";
 
 type Variante = { tono: string; post: string };
@@ -53,9 +54,9 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
                 <Text style={styles.texto}>{variantes[activa].post}</Text>
             </View>
 
-            <TouchableOpacity style={[styles.boton, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
+            <BotonConRebote style={[styles.boton, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
                 <Text style={styles.botonTexto}>{copiado ? t("comun.copiado") : t("comun.copiar")}</Text>
-            </TouchableOpacity>
+            </BotonConRebote>
 
             {destino && (
                 <TouchableOpacity
@@ -66,13 +67,13 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
                 </TouchableOpacity>
             )}
 
-            <TouchableOpacity
+            <BotonConRebote
                 style={[styles.boton, { backgroundColor: guardado ? COLORES.border : COLORES.accentWarm }]}
                 onPress={guardar}
                 disabled={guardado}
             >
                 <Text style={styles.botonTexto}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
-            </TouchableOpacity>
+            </BotonConRebote>
         </View>
     );
 }
