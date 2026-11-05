@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { useRef } from "react";
 import { Animated, GestureResponderEvent, TouchableOpacity, ViewStyle } from "react-native";
 
@@ -12,6 +13,7 @@ export default function BotonConRebote({ onPress, disabled, style, children }: P
     const escala = useRef(new Animated.Value(1)).current;
 
     function manejarPress(e: GestureResponderEvent) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         Animated.sequence([
             Animated.timing(escala, { toValue: 0.94, duration: 80, useNativeDriver: true }),
             Animated.spring(escala, { toValue: 1, useNativeDriver: true, friction: 4 }),

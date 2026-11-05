@@ -1,4 +1,5 @@
 import { AudioModule, RecordingPresets, setAudioModeAsync, useAudioRecorder } from "expo-audio";
+import * as Haptics from "expo-haptics";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Animated, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -73,6 +74,7 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
             await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
             await audioRecorder.prepareToRecordAsync();
             audioRecorder.record();
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             onGrabando(true);
         } catch (err: any) {
             onError(t("grabador.errorIniciar", { detalle: err?.message || String(err) }));
@@ -81,6 +83,7 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
 
     async function parar() {
         onGrabando(false);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         try {
             await audioRecorder.stop();
             const uri = audioRecorder.uri;
