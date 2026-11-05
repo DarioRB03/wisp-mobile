@@ -42,6 +42,8 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
                         key={v.tono}
                         etiqueta={t(`tonos.${v.tono}`, { defaultValue: v.tono })}
                         activo={activa === i}
+                        colorActivo="white"
+                        colorTextoActivo={COLORES.bg}
                         onPress={() => {
                             setActiva(i);
                             setGuardado(false);
@@ -60,7 +62,7 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
 
             {destino && (
                 <TouchableOpacity
-                    style={[styles.boton, { backgroundColor: COLORES.surface, borderWidth: 1, borderColor: COLORES.border }]}
+                    style={[styles.boton, { backgroundColor: destino.color }]}
                     onPress={() => copiarYAbrir(formato, variantes[activa].post)}
                 >
                     <Text style={styles.botonTexto}>{etiquetaDestino(formato, t)}</Text>
@@ -68,11 +70,11 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
             )}
 
             <BotonConRebote
-                style={[styles.boton, { backgroundColor: guardado ? COLORES.border : COLORES.accentWarm }]}
+                style={[styles.boton, { backgroundColor: "transparent", borderWidth: 1, borderColor: COLORES.border, opacity: guardado ? 0.5 : 1 }]}
                 onPress={guardar}
                 disabled={guardado}
             >
-                <Text style={styles.botonTexto}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
+                <Text style={[styles.botonTexto, { color: COLORES.textMuted }]}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </BotonConRebote>
         </View>
     );

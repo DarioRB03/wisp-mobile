@@ -2,7 +2,7 @@ import { AudioModule, RecordingPresets, setAudioModeAsync, useAudioRecorder } fr
 import * as Haptics from "expo-haptics";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Animated, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, TIPOGRAFIA } from "../constants/theme";
 
 type Props = {
@@ -93,7 +93,7 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
         }
     }
 
-    const etiquetaBoton = grabando ? t("grabador.pararCorto") : t("grabador.grabarCorto");
+    const etiquetaBoton = grabando ? t("grabador.parar") : t("grabador.empezar");
 
     return (
         <View style={styles.contenedor}>
@@ -121,11 +121,11 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
                         ]}
                     />
                 )}
-                <View style={[styles.boton, { backgroundColor: grabando ? COLORES.danger : COLORES.accentWarm }]}>
+                <View style={[styles.boton, grabando ? styles.botonGrabando : styles.botonIdle]}>
                     {transcribiendo ? (
-                        <ActivityIndicator color={COLORES.bg} />
+                        <ActivityIndicator color={grabando ? COLORES.bg : COLORES.accentWarm} />
                     ) : (
-                        <Text style={styles.texto}>{etiquetaBoton}</Text>
+                        <View style={grabando ? styles.iconoCuadrado : styles.iconoCirculo} />
                     )}
                 </View>
             </TouchableOpacity>
@@ -143,16 +143,19 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
 
 const styles = StyleSheet.create({
     contenedor: { alignItems: "center", marginTop: ESPACIADO.xl },
-    wrapperBoton: { width: 90, height: 90, alignItems: "center", justifyContent: "center" },
+    wrapperBoton: { width: 80, height: 80, alignItems: "center", justifyContent: "center" },
     anillo: {
         position: "absolute",
-        width: 90,
-        height: 90,
-        borderRadius: 45,
+        width: 80,
+        height: 80,
+        borderRadius: 40,
         backgroundColor: COLORES.accentWarm,
     },
-    boton: { width: 90, height: 90, borderRadius: 45, alignItems: "center", justifyContent: "center" },
-    texto: { color: COLORES.bg, fontWeight: "700", fontSize: TIPOGRAFIA.pequeno },
+    boton: { width: 80, height: 80, borderRadius: 40, alignItems: "center", justifyContent: "center" },
+    botonIdle: { backgroundColor: COLORES.surface, borderWidth: 1, borderColor: COLORES.border },
+    botonGrabando: { backgroundColor: COLORES.accentWarm },
+    iconoCirculo: { width: 24, height: 24, borderRadius: 12, backgroundColor: COLORES.accentWarm },
+    iconoCuadrado: { width: 16, height: 16, borderRadius: 3, backgroundColor: COLORES.bg },
     fila: { flexDirection: "row", alignItems: "flex-end", gap: 4, height: 32, marginTop: ESPACIADO.md },
     barra: { width: 4, borderRadius: 2, backgroundColor: COLORES.accentWarm },
 });

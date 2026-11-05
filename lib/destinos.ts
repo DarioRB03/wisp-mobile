@@ -8,15 +8,18 @@ type Destino = {
     tipo: TipoDestino;
     url?: string;
     nombre?: string;
+    color: string;
+    icono: string;
+    iconoBrand: boolean;
 };
 
 export const DESTINOS: Record<string, Destino> = {
-    linkedin: { tipo: "abrir", url: "https://www.linkedin.com/feed/?shareActive=true", nombre: "LinkedIn" },
-    hilo: { tipo: "abrir", url: "https://twitter.com/compose/tweet", nombre: "X" },
-    tiktok: { tipo: "abrir", url: "https://www.tiktok.com/upload", nombre: "TikTok" },
-    youtube: { tipo: "abrir", url: "https://studio.youtube.com/", nombre: "YouTube" },
-    instagram: { tipo: "abrir", url: "https://www.instagram.com/", nombre: "Instagram" },
-    email: { tipo: "mailto" },
+    linkedin:  { tipo: "abrir",  url: "https://www.linkedin.com/feed/?shareActive=true", nombre: "LinkedIn",  color: "#0A66C2", icono: "linkedin",  iconoBrand: true },
+    hilo:      { tipo: "abrir",  url: "https://twitter.com/compose/tweet",               nombre: "X",         color: "#141414", icono: "x-twitter", iconoBrand: true },
+    tiktok:    { tipo: "abrir",  url: "https://www.tiktok.com/upload",                   nombre: "TikTok",    color: "#141414", icono: "tiktok",    iconoBrand: true },
+    youtube:   { tipo: "abrir",  url: "https://studio.youtube.com/",                     nombre: "YouTube",   color: "#FF0000", icono: "youtube",   iconoBrand: true },
+    instagram: { tipo: "abrir",  url: "https://www.instagram.com/",                      nombre: "Instagram", color: "#C13584", icono: "instagram", iconoBrand: true },
+    email:     { tipo: "mailto",                                                                               color: "#4B5563", icono: "envelope",  iconoBrand: false },
 };
 
 export function etiquetaDestino(formato: string, t: TFunction): string {

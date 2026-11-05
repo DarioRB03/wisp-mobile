@@ -42,7 +42,7 @@ export default function ResultadoSimple({ post, formato, onGuardar }: Props) {
 
             {destino && (
                 <TouchableOpacity
-                    style={[styles.boton, { backgroundColor: COLORES.surface, borderWidth: 1, borderColor: COLORES.border }]}
+                    style={[styles.boton, { backgroundColor: destino.color }]}
                     onPress={() => copiarYAbrir(formato, post)}
                 >
                     <Text style={styles.botonTexto}>{etiquetaDestino(formato, t)}</Text>
@@ -50,11 +50,11 @@ export default function ResultadoSimple({ post, formato, onGuardar }: Props) {
             )}
 
             <BotonConRebote
-                style={[styles.boton, { backgroundColor: guardado ? COLORES.border : COLORES.accentWarm }]}
+                style={[styles.boton, { backgroundColor: "transparent", borderWidth: 1, borderColor: COLORES.border, opacity: guardado ? 0.5 : 1 }]}
                 onPress={guardar}
                 disabled={guardado}
             >
-                <Text style={styles.botonTexto}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
+                <Text style={[styles.botonTexto, { color: COLORES.textMuted }]}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </BotonConRebote>
         </View>
     );

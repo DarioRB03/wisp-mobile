@@ -1,8 +1,10 @@
 import * as Clipboard from "expo-clipboard";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { DESTINOS } from "../lib/destinos";
 
 type Nota = {
     id: string;
@@ -65,9 +67,17 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
             <View style={styles.fondo}>
                 <View style={styles.caja}>
                     <View style={styles.header}>
-                        <Text style={styles.fecha}>{nota.fecha}</Text>
-                        <TouchableOpacity onPress={onCerrar}>
-                            <Text style={styles.enlace}>{t("comun.cerrar")} ✕</Text>
+                        <View style={styles.headerIzq}>
+                            <FontAwesome6
+                                name={DESTINOS[nota.formato]?.icono ?? "circle"}
+                                iconStyle={DESTINOS[nota.formato]?.iconoBrand ? "brand" : "solid"}
+                                size={13}
+                                color={COLORES.textMuted}
+                            />
+                            <Text style={styles.fecha}>{nota.fecha}</Text>
+                        </View>
+                        <TouchableOpacity onPress={onCerrar} style={styles.botonCerrar} accessibilityLabel={t("comun.cerrar")}>
+                            <Text style={styles.iconoCerrar}>✕</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -118,9 +128,11 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
 const styles = StyleSheet.create({
     fondo: { flex: 1, backgroundColor: "rgba(0,0,0,0.7)", justifyContent: "center", padding: ESPACIADO.lg },
     caja: { backgroundColor: COLORES.bg, borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.sm, padding: ESPACIADO.lg },
-    header: { flexDirection: "row", justifyContent: "space-between", marginBottom: ESPACIADO.md },
+    header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: ESPACIADO.md },
+    headerIzq: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.xs + 2 },
     fecha: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.minimo },
-    enlace: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.pequeno },
+    botonCerrar: { width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: COLORES.border, alignItems: "center", justifyContent: "center" },
+    iconoCerrar: { color: COLORES.textMuted, fontSize: 14, lineHeight: 16 },
     post: { color: COLORES.text, fontSize: TIPOGRAFIA.cuerpo, lineHeight: 20 },
     filaFeedback: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.xs + 2, marginTop: ESPACIADO.md, flexWrap: "wrap" },
     pregunta: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.minimo, marginRight: ESPACIADO.xs },

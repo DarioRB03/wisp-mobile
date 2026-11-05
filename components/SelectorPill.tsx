@@ -5,18 +5,20 @@ type Props = {
     etiqueta: string;
     activo: boolean;
     onPress: () => void;
+    colorActivo?: string;
+    colorTextoActivo?: string;
 };
 
-export default function SelectorPill({ etiqueta, activo, onPress }: Props) {
+export default function SelectorPill({ etiqueta, activo, onPress, colorActivo = COLORES.accentCool, colorTextoActivo = "white" }: Props) {
     return (
         <TouchableOpacity
             onPress={onPress}
             style={[
                 styles.pestana,
-                { backgroundColor: activo ? COLORES.accentCool : "transparent", borderColor: activo ? COLORES.accentCool : COLORES.border },
+                { backgroundColor: activo ? colorActivo : "transparent", borderColor: activo ? colorActivo : COLORES.border },
             ]}
         >
-            <Text style={{ color: activo ? "white" : COLORES.textMuted, fontSize: TIPOGRAFIA.pequeno }}>{etiqueta}</Text>
+            <Text style={{ color: activo ? colorTextoActivo : COLORES.textMuted, fontSize: TIPOGRAFIA.pequeno }}>{etiqueta}</Text>
         </TouchableOpacity>
     );
 }

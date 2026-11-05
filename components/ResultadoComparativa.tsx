@@ -1,4 +1,5 @@
 import * as Clipboard from "expo-clipboard";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -33,7 +34,15 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
 
     return (
         <View style={styles.caja}>
-            <Text style={styles.etiquetaFormato}>{item.formato.toUpperCase()}</Text>
+            <View style={styles.cabecera}>
+                <FontAwesome6
+                    name={destino?.icono ?? "circle"}
+                    iconStyle={destino?.iconoBrand ? "brand" : "solid"}
+                    size={14}
+                    color={COLORES.textMuted}
+                />
+                <Text style={styles.etiquetaFormato}>{destino?.nombre ?? item.formato}</Text>
+            </View>
             <Text style={styles.texto}>{item.post}</Text>
 
             <BotonConRebote style={[styles.botonPequeno, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
@@ -42,7 +51,7 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
 
             {destino && (
                 <TouchableOpacity
-                    style={[styles.botonPequeno, { backgroundColor: COLORES.bg, borderWidth: 1, borderColor: COLORES.border }]}
+                    style={[styles.botonPequeno, { backgroundColor: destino.color }]}
                     onPress={() => copiarYAbrir(item.formato, item.post)}
                 >
                     <Text style={styles.botonTextoPequeno}>{etiquetaDestino(item.formato, t)}</Text>
@@ -50,11 +59,11 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
             )}
 
             <BotonConRebote
-                style={[styles.botonPequeno, { backgroundColor: guardado ? COLORES.border : COLORES.accentWarm }]}
+                style={[styles.botonPequeno, { backgroundColor: "transparent", borderWidth: 1, borderColor: COLORES.border, opacity: guardado ? 0.5 : 1 }]}
                 onPress={guardar}
                 disabled={guardado}
             >
-                <Text style={styles.botonTextoPequeno}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
+                <Text style={[styles.botonTextoPequeno, { color: COLORES.textMuted }]}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </BotonConRebote>
         </View>
     );
@@ -73,7 +82,8 @@ export default function ResultadoComparativa({ resultados, onGuardar }: Props) {
 const styles = StyleSheet.create({
     contenedor: { width: "100%", marginTop: ESPACIADO.xl - 4, gap: ESPACIADO.md },
     caja: { width: "100%", borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.sm, padding: ESPACIADO.md, gap: ESPACIADO.sm },
-    etiquetaFormato: { color: COLORES.accentCool, fontSize: TIPOGRAFIA.minimo, fontWeight: "600", marginBottom: ESPACIADO.xs },
+    cabecera: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.sm, marginBottom: ESPACIADO.xs },
+    etiquetaFormato: { color: COLORES.text, fontSize: TIPOGRAFIA.cuerpo, fontWeight: "500" },
     texto: { color: COLORES.text, fontSize: TIPOGRAFIA.pequeno + 1 },
     botonPequeno: { borderRadius: RADIOS.sm, paddingVertical: ESPACIADO.sm, alignItems: "center" },
     botonTextoPequeno: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.minimo + 1 },
