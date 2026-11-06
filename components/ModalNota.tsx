@@ -2,7 +2,7 @@ import * as Clipboard from "expo-clipboard";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS } from "../lib/destinos";
 
@@ -63,9 +63,12 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
     }
 
     return (
-        <Modal visible transparent animationType="fade" onRequestClose={onCerrar}>
+        <Modal visible transparent animationType="slide" onRequestClose={onCerrar}>
+            <TouchableWithoutFeedback onPress={onCerrar}>
             <View style={styles.fondo}>
+            <TouchableWithoutFeedback>
                 <View style={styles.caja}>
+                    <View style={styles.asa} />
                     <View style={styles.header}>
                         <View style={styles.headerIzq}>
                             <FontAwesome6
@@ -120,14 +123,17 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
                         </TouchableOpacity>
                     </View>
                 </View>
+            </TouchableWithoutFeedback>
             </View>
+            </TouchableWithoutFeedback>
         </Modal>
     );
 }
 
 const styles = StyleSheet.create({
-    fondo: { flex: 1, backgroundColor: "rgba(0,0,0,0.7)", justifyContent: "center", padding: ESPACIADO.lg },
-    caja: { backgroundColor: COLORES.bg, borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.sm, padding: ESPACIADO.lg },
+    fondo: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "flex-end" },
+    caja: { backgroundColor: COLORES.surface, borderTopWidth: 1, borderTopColor: COLORES.border, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: ESPACIADO.lg, paddingTop: ESPACIADO.md },
+    asa: { width: 36, height: 4, borderRadius: 2, backgroundColor: COLORES.border, alignSelf: "center", marginBottom: ESPACIADO.md },
     header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: ESPACIADO.md },
     headerIzq: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.xs + 2 },
     fecha: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.minimo },

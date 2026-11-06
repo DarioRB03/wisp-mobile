@@ -115,6 +115,8 @@
         "placeholder": "Ej: Soy desarrollador backend pivotando hacia AI Engineering...",
         "guardar": "Guardar perfil",
         "guardando": "Guardando...",
+        "guardado": "Guardado ✓",
+        "editar": "Editar perfil",
         "errorCargar": "No se pudo cargar tu perfil.",
         "errorGuardar": "No se pudo guardar el perfil."
     }

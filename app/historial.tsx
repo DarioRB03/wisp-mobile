@@ -1,9 +1,10 @@
-import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ItemHistorial from "../components/ItemHistorial";
 import ModalNota from "../components/ModalNota";
+import SkeletonHistorial from "../components/SkeletonHistorial";
+import TabBar from "../components/TabBar";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { borrarNota, enviarFeedback, obtenerHistorial } from "../lib/api";
 
@@ -75,15 +76,11 @@ export default function Historial() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.enlace}>{t("comun.volver")}</Text>
-                </TouchableOpacity>
                 <Text style={styles.titulo}>{t("historial.titulo")}</Text>
-                <View style={{ width: 50 }} />
             </View>
 
             {cargando ? (
-                <ActivityIndicator color={COLORES.accentCool} style={{ marginTop: ESPACIADO.xxl + 8 }} />
+                <SkeletonHistorial />
             ) : error ? (
                 <Text style={styles.error}>{error}</Text>
             ) : notas.length === 0 ? (
@@ -126,7 +123,7 @@ export default function Historial() {
                             })}
                         extraData={[i18n.language, filtro, orden]}
                         keyExtractor={(item) => item.id}
-                        contentContainerStyle={{ padding: ESPACIADO.lg, gap: ESPACIADO.sm + 2 }}
+                        contentContainerStyle={{ padding: ESPACIADO.lg, gap: ESPACIADO.sm + 2, paddingBottom: 90 }}
                         ListEmptyComponent={<Text style={styles.vacio}>{t("historial.sinResultados")}</Text>}
                         renderItem={({ item }) => (
                             <ItemHistorial
@@ -134,6 +131,7 @@ export default function Historial() {
                                 fecha={formatearFecha(item.creado_en)}
                                 post={item.post}
                                 onPress={() => setSeleccionada(item)}
+                                onEliminar={() => manejarBorrar(item.id)}
                             />
                         )}
                     />
@@ -146,15 +144,15 @@ export default function Historial() {
                 onBorrar={manejarBorrar}
                 onFeedback={manejarFeedback}
             />
+            <TabBar />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORES.bg, paddingTop: 60 },
-    header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: ESPACIADO.lg, marginBottom: ESPACIADO.sm + 2 },
+    header: { paddingHorizontal: ESPACIADO.lg, marginBottom: ESPACIADO.sm + 2 },
     titulo: { fontSize: TIPOGRAFIA.subtitulo, fontWeight: "600", color: COLORES.text },
-    enlace: { color: COLORES.accentCool, fontSize: TIPOGRAFIA.cuerpo },
     error: { color: "#F87171", textAlign: "center", marginTop: ESPACIADO.xxl + 8 },
     vacio: { color: COLORES.textMuted, textAlign: "center", marginTop: ESPACIADO.xxl + 8, fontSize: TIPOGRAFIA.pequeno },
     controles: { paddingHorizontal: ESPACIADO.lg, gap: ESPACIADO.sm },

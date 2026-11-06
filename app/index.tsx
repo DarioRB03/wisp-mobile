@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Session } from "@supabase/supabase-js";
-import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,7 +15,7 @@ import {
 } from "../lib/api";
 import { supabase } from "../lib/supabase";
 
-import SelectorIdioma from "@/components/SelectorIdioma";
+import TabBar from "../components/TabBar";
 import BannerBorrador from "../components/BannerBorrador";
 import CampoTono from "../components/CampoTono";
 import ContadorUso from "../components/ContadorUso";
@@ -190,23 +189,11 @@ function PantallaPrincipal() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContent} style={{ backgroundColor: COLORES.bg }}>
+    <View style={{ flex: 1, backgroundColor: COLORES.bg }}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
       <View style={styles.centrado}>
         <Text style={styles.titulo}>{t("app.nombre")}</Text>
         <Text style={styles.subtitulo}>{t("app.lema")}</Text>
-
-        <View style={[styles.filaEnlaces, { alignItems: "center" }]}>
-          <TouchableOpacity onPress={() => router.push("/historial")}>
-            <Text style={styles.enlace}>{t("nav.historial")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/perfil")}>
-            <Text style={styles.enlace}>{t("nav.perfil")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={cerrarSesion}>
-            <Text style={styles.enlace}>{t("nav.cerrarSesion")}</Text>
-          </TouchableOpacity>
-          <SelectorIdioma />
-        </View>
 
         <ContadorUso uso={uso} />
 
@@ -279,17 +266,17 @@ function PantallaPrincipal() {
       </View>
       <StatusBar style="light" />
     </ScrollView>
+      <TabBar />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORES.bg, paddingHorizontal: ESPACIADO.xl },
-  scrollContent: { flexGrow: 1, paddingHorizontal: ESPACIADO.xl, paddingTop: 80, paddingBottom: ESPACIADO.xxl + 8 },
+  scrollContent: { flexGrow: 1, paddingHorizontal: ESPACIADO.xl, paddingTop: 80, paddingBottom: 90 },
   centrado: { justifyContent: "center", alignItems: "center" },
   titulo: { fontSize: TIPOGRAFIA.titulo, fontWeight: "600", color: COLORES.text },
   subtitulo: { fontSize: TIPOGRAFIA.pequeno, color: COLORES.textMuted, marginTop: ESPACIADO.xs },
-  filaEnlaces: { flexDirection: "row", gap: ESPACIADO.lg, marginTop: ESPACIADO.sm },
-  enlace: { color: COLORES.accentCool, fontSize: TIPOGRAFIA.pequeno },
   input: {
     width: "100%",
     borderWidth: 1,

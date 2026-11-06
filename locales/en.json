@@ -115,6 +115,8 @@
         "placeholder": "E.g. I'm a backend developer moving into AI Engineering...",
         "guardar": "Save profile",
         "guardando": "Saving...",
+        "guardado": "Saved ✓",
+        "editar": "Edit profile",
         "errorCargar": "Couldn't load your profile.",
         "errorGuardar": "Couldn't save your profile."
     }

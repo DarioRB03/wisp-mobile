@@ -3,7 +3,7 @@ import * as Haptics from "expo-haptics";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Animated, StyleSheet, TouchableOpacity, View } from "react-native";
-import { COLORES, ESPACIADO, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO } from "../constants/theme";
 
 type Props = {
     grabando: boolean;
@@ -15,33 +15,14 @@ type Props = {
 };
 
 const NUM_BARRAS = 20;
-const ALTURAS = Array.from({ length: NUM_BARRAS }, (_, i) => 8 + ((i * 7) % 24));
-
-function BarraOnda({ altura, retraso }: { altura: number; retraso: number }) {
-    const opacidad = useRef(new Animated.Value(0.4)).current;
-
-    useEffect(() => {
-        const animacion = Animated.loop(
-            Animated.sequence([
-                Animated.timing(opacidad, { toValue: 1, duration: 500, delay: retraso, useNativeDriver: true }),
-                Animated.timing(opacidad, { toValue: 0.4, duration: 500, useNativeDriver: true }),
-            ])
-        );
-        animacion.start();
-        return () => animacion.stop();
-    }, []);
-
-    return (
-        <Animated.View
-            style={[styles.barra, { height: altura, opacity: opacidad }]}
-        />
-    );
-}
+const ALTURAS_BASE = Array.from({ length: NUM_BARRAS }, (_, i) => 8 + ((i * 7) % 24));
 
 export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, onTranscripcionLista, onError, onEmpezar }: Props) {
     const { t } = useTranslation();
     const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
     const pulso = useRef(new Animated.Value(0.3)).current;
+    const alturas = useRef(ALTURAS_BASE.map((h) => new Animated.Value(h))).current;
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
         AudioModule.requestRecordingPermissionsAsync();
@@ -50,6 +31,10 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
     useEffect(() => {
         if (!grabando) {
             pulso.setValue(0.3);
+            if (timerRef.current) clearInterval(timerRef.current);
+            ALTURAS_BASE.forEach((h, i) => {
+                Animated.timing(alturas[i], { toValue: h, duration: 300, useNativeDriver: false }).start();
+            });
             return;
         }
         const animacion = Animated.loop(
@@ -59,7 +44,19 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
             ])
         );
         animacion.start();
-        return () => animacion.stop();
+        timerRef.current = setInterval(() => {
+            alturas.forEach((anim) => {
+                Animated.timing(anim, {
+                    toValue: 4 + Math.random() * 28,
+                    duration: 140,
+                    useNativeDriver: false,
+                }).start();
+            });
+        }, 150);
+        return () => {
+            animacion.stop();
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
     }, [grabando]);
 
     async function iniciar() {
@@ -132,8 +129,8 @@ export default function GrabadorAudio({ grabando, transcribiendo, onGrabando, on
 
             {grabando && (
                 <View style={styles.fila}>
-                    {ALTURAS.map((altura, i) => (
-                        <BarraOnda key={i} altura={altura} retraso={i * 50} />
+                    {alturas.map((altura, i) => (
+                        <Animated.View key={i} style={[styles.barra, { height: altura }]} />
                     ))}
                 </View>
             )}

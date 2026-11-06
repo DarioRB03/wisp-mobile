@@ -1,33 +1,39 @@
-import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import SelectorIdioma from "../components/SelectorIdioma";
+import SkeletonPerfil from "../components/SkeletonPerfil";
+import TabBar from "../components/TabBar";
 import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { guardarPerfil, obtenerPerfil } from "../lib/api";
+import { supabase } from "../lib/supabase";
 
 export default function Perfil() {
     const { t } = useTranslation();
 
     const [contexto, setContexto] = useState("");
     const [cargando, setCargando] = useState(true);
+    const [editando, setEditando] = useState(false);
     const [guardando, setGuardando] = useState(false);
-    const [guardado, setGuardado] = useState(false);
     const [error, setError] = useState("");
 
     useEffect(() => {
         obtenerPerfil()
-            .then(setContexto)
+            .then((texto) => {
+                setContexto(texto);
+                setEditando(!texto);
+            })
             .catch(() => setError(t("perfil.errorCargar")))
             .finally(() => setCargando(false));
     }, []);
 
     async function manejarGuardar() {
+        Keyboard.dismiss();
         setGuardando(true);
-        setGuardado(false);
         setError("");
         try {
             await guardarPerfil(contexto);
-            setGuardado(true);
+            setEditando(false);
         } catch (err) {
             setError(t("perfil.errorGuardar"));
         } finally {
@@ -38,39 +44,53 @@ export default function Perfil() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.enlace}>{t("comun.volver")}</Text>
-                </TouchableOpacity>
                 <Text style={styles.titulo}>{t("perfil.titulo")}</Text>
-                <View style={{ width: 50 }} />
+                <View style={styles.headerDer}>
+                    <SelectorIdioma />
+                    <TouchableOpacity onPress={() => supabase.auth.signOut()}>
+                        <Text style={styles.enlace}>{t("nav.cerrarSesion")}</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
-            <View style={styles.contenido}>
-                <Text style={styles.descripcion}>{t("perfil.descripcion")}</Text>
-
-                {cargando ? (
-                    <ActivityIndicator color={COLORES.accentCool} style={{ marginTop: ESPACIADO.lg }} />
-                ) : (
-                    <>
-                        <TextInput
-                            style={styles.input}
-                            value={contexto}
-                            onChangeText={setContexto}
-                            placeholder={t("perfil.placeholder")}
-                            placeholderTextColor={COLORES.textMuted}
-                            multiline
-                        />
-                        {error ? <Text style={styles.error}>{error}</Text> : null}
-                        <TouchableOpacity style={styles.boton} onPress={manejarGuardar} disabled={guardando}>
-                            {guardando ? (
-                                <ActivityIndicator color="white" />
-                            ) : (
-                                <Text style={styles.botonTexto}>{guardado ? t("comun.guardado") : t("perfil.guardar")}</Text>
-                            )}
-                        </TouchableOpacity>
-                    </>
-                )}
-            </View>
+            {cargando ? (
+                <SkeletonPerfil />
+            ) : (
+                <View style={styles.contenido}>
+                    <Text style={styles.descripcion}>{t("perfil.descripcion")}</Text>
+                    {editando ? (
+                        <>
+                            <TextInput
+                                style={styles.input}
+                                value={contexto}
+                                onChangeText={setContexto}
+                                placeholder={t("perfil.placeholder")}
+                                placeholderTextColor={COLORES.textMuted}
+                                multiline
+                                autoFocus
+                            />
+                            {error ? <Text style={styles.error}>{error}</Text> : null}
+                            <TouchableOpacity style={styles.boton} onPress={manejarGuardar} disabled={guardando}>
+                                {guardando ? (
+                                    <ActivityIndicator color="white" />
+                                ) : (
+                                    <Text style={styles.botonTexto}>{t("perfil.guardar")}</Text>
+                                )}
+                            </TouchableOpacity>
+                        </>
+                    ) : (
+                        <>
+                            <View style={styles.vistaTexto}>
+                                <Text style={styles.textoGuardado}>{contexto || t("perfil.placeholder")}</Text>
+                            </View>
+                            <TouchableOpacity style={styles.botonEditar} onPress={() => setEditando(true)}>
+                                <Text style={styles.botonEditarTexto}>{t("perfil.editar")}</Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
+                </View>
+            )}
+            <TabBar />
         </View>
     );
 }
@@ -78,9 +98,10 @@ export default function Perfil() {
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORES.bg, paddingTop: 60 },
     header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: ESPACIADO.lg, marginBottom: ESPACIADO.lg },
+    headerDer: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.md },
     titulo: { fontSize: TIPOGRAFIA.subtitulo, fontWeight: "600", color: COLORES.text },
-    enlace: { color: COLORES.accentCool, fontSize: TIPOGRAFIA.cuerpo },
-    contenido: { paddingHorizontal: ESPACIADO.lg },
+    enlace: { color: COLORES.danger, fontSize: TIPOGRAFIA.pequeno },
+    contenido: { paddingHorizontal: ESPACIADO.lg, paddingBottom: 90 },
     descripcion: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.pequeno, marginBottom: ESPACIADO.lg },
     input: {
         borderWidth: 1,
@@ -94,5 +115,9 @@ const styles = StyleSheet.create({
     },
     boton: { backgroundColor: COLORES.accentCool, borderRadius: RADIOS.sm, padding: ESPACIADO.md + 2, marginTop: ESPACIADO.md, alignItems: "center" },
     botonTexto: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.cuerpo },
+    botonEditar: { backgroundColor: COLORES.accentCool, borderRadius: RADIOS.sm, padding: ESPACIADO.md + 2, marginTop: ESPACIADO.md, alignItems: "center" },
+    botonEditarTexto: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.cuerpo },
+    vistaTexto: { borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.sm, padding: ESPACIADO.md, minHeight: 120 },
+    textoGuardado: { color: COLORES.text, fontSize: TIPOGRAFIA.cuerpo, lineHeight: 20 },
     error: { color: "#F87171", fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
 });
