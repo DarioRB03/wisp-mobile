@@ -159,8 +159,8 @@ function PantallaPrincipal() {
       } else {
         await aplicarTranscripcion(texto);
       }
-    } catch (err) {
-      setError(t("grabador.errorTranscribir"));
+    } catch (err: any) {
+      setError(err?.message || t("grabador.errorTranscribir"));
     } finally {
       setTranscribiendo(false);
     }

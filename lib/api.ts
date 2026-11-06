@@ -10,23 +10,38 @@ async function obtenerToken(): Promise<string> {
 
 export async function transcribirAudio(uri: string): Promise<string> {
     const token = await obtenerToken();
-    const formData = new FormData();
-    formData.append("audio", {
-        uri,
-        name: "grabacion.m4a",
-        type: "audio/m4a",
-    } as any);
-    formData.append("idioma", i18n.language);
 
-    const response = await fetch(`${API_URL}/transcribir`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+    return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append("audio", { uri, name: "grabacion.m4a", type: "audio/m4a" } as any);
+        formData.append("idioma", i18n.language);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `${API_URL}/transcribir`);
+        xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    resolve(JSON.parse(xhr.responseText).texto);
+                } catch {
+                    reject(new Error("Respuesta inválida del servidor"));
+                }
+            } else {
+                try {
+                    const data = JSON.parse(xhr.responseText);
+                    reject(new Error(data.detail || `Error ${xhr.status}: No se pudo transcribir el audio`));
+                } catch {
+                    reject(new Error(`Error ${xhr.status}: No se pudo transcribir el audio`));
+                }
+            }
+        };
+
+        xhr.onerror = () => reject(new Error("Error de red al transcribir"));
+        xhr.ontimeout = () => reject(new Error("Tiempo de espera agotado"));
+        xhr.timeout = 60000;
+        xhr.send(formData);
     });
-
-    if (!response.ok) throw new Error("No se pudo transcribir el audio");
-    const data = await response.json();
-    return data.texto;
 }
 
 export async function generarPost(texto: string, formato: string) {
