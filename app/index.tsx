@@ -3,8 +3,9 @@ import type { Session } from "@supabase/supabase-js";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import {
   generarComparativa,
   generarPost,
@@ -65,6 +66,7 @@ export default function Index() {
 
 function PantallaPrincipal() {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const [modo, setModo] = useState<Modo>("estandar");
   const [formato, setFormato] = useState("linkedin");
@@ -75,6 +77,7 @@ function PantallaPrincipal() {
   const [transcribiendo, setTranscribiendo] = useState(false);
   const [generando, setGenerando] = useState(false);
   const [transcripcion, setTranscripcion] = useState("");
+  const [transcripcionEditada, setTranscripcionEditada] = useState(false);
   const [borradorDisponible, setBorradorDisponible] = useState<string | null>(null);
 
   const [variantes, setVariantes] = useState<{ tono: string; post: string }[]>([]);
@@ -106,7 +109,7 @@ function PantallaPrincipal() {
     try {
       setUso(await obtenerUso());
     } catch (err) {
-      // Silencioso
+      // No mostrar datos erróneos; ContadorUso oculta el componente cuando uso=null
     }
   }
 
@@ -129,15 +132,32 @@ function PantallaPrincipal() {
     setBorradorDisponible(null);
   }
 
+  async function aplicarTranscripcion(texto: string) {
+    setTranscripcion(texto);
+    setTranscripcionEditada(false);
+    setBorradorDisponible(null);
+    limpiarResultados();
+  }
+
   async function manejarAudioListo(uri: string) {
     setTranscribiendo(true);
     try {
       const texto = await transcribirAudio(uri);
       if (!texto.trim()) {
         setError(t("grabador.sinVoz"));
+        return;
+      }
+      if (transcripcionEditada && transcripcion.trim()) {
+        Alert.alert(
+          t("grabador.reemplazarTitulo"),
+          t("grabador.reemplazarMensaje"),
+          [
+            { text: t("comun.cancelar"), style: "cancel" },
+            { text: t("grabador.reemplazar"), style: "destructive", onPress: () => aplicarTranscripcion(texto) },
+          ]
+        );
       } else {
-        setTranscripcion(texto);
-        setBorradorDisponible(null);
+        await aplicarTranscripcion(texto);
       }
     } catch (err) {
       setError(t("grabador.errorTranscribir"));
@@ -190,10 +210,10 @@ function PantallaPrincipal() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORES.bg }}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: (insets.bottom || ESPACIADO.sm) + 56 + ESPACIADO.xl }]}>
       <View style={styles.centrado}>
-        <Text style={styles.titulo}>{t("app.nombre")}</Text>
-        <Text style={styles.subtitulo}>{t("app.lema")}</Text>
+        <Text style={[styles.titulo, { color: COLORES.accentWarm, fontFamily: "Fraunces-SemiBold" }]}>{t("app.nombre")}</Text>
+        <Text style={[styles.subtitulo, { fontFamily: FUENTES.cuerpo }]}>{t("app.lema")}</Text>
 
         <ContadorUso uso={uso} />
 
@@ -239,7 +259,7 @@ function PantallaPrincipal() {
             <TextInput
               style={[styles.input, { minHeight: 100, marginTop: ESPACIADO.xl - 4 }]}
               value={transcripcion}
-              onChangeText={setTranscripcion}
+              onChangeText={(v) => { setTranscripcion(v); setTranscripcionEditada(true); }}
               multiline
             />
             <TouchableOpacity style={styles.boton} onPress={generar} disabled={generando}>
@@ -273,9 +293,9 @@ function PantallaPrincipal() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORES.bg, paddingHorizontal: ESPACIADO.xl },
-  scrollContent: { flexGrow: 1, paddingHorizontal: ESPACIADO.xl, paddingTop: 80, paddingBottom: 90 },
+  scrollContent: { flexGrow: 1, paddingHorizontal: ESPACIADO.xl, paddingTop: 80 },
   centrado: { justifyContent: "center", alignItems: "center" },
-  titulo: { fontSize: TIPOGRAFIA.titulo, fontWeight: "600", color: COLORES.text },
+  titulo: { fontSize: TIPOGRAFIA.titulo, fontFamily: FUENTES.display, color: COLORES.accentWarm },
   subtitulo: { fontSize: TIPOGRAFIA.pequeno, color: COLORES.textMuted, marginTop: ESPACIADO.xs },
   input: {
     width: "100%",
@@ -286,8 +306,9 @@ const styles = StyleSheet.create({
     marginTop: ESPACIADO.sm,
     color: COLORES.text,
     fontSize: TIPOGRAFIA.cuerpo,
+    fontFamily: FUENTES.cuerpo,
   },
   boton: { width: "100%", backgroundColor: COLORES.accentCool, borderRadius: RADIOS.sm, padding: ESPACIADO.md + 2, marginTop: ESPACIADO.lg, alignItems: "center" },
-  botonTexto: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.cuerpo },
-  error: { color: "#F87171", fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
+  botonTexto: { color: "white", fontFamily: FUENTES.cuerpoNegro, fontSize: TIPOGRAFIA.cuerpo },
+  error: { color: "#F87171", fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
 });

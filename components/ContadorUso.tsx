@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
-import { COLORES, ESPACIADO, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, TIPOGRAFIA } from "../constants/theme";
 
 type Props = {
     uso: { usadas: number; limite: number; restantes: number; racha: number } | null;
@@ -25,5 +25,5 @@ export default function ContadorUso({ uso }: Props) {
 
 const styles = StyleSheet.create({
     contenedor: { alignItems: "center", marginTop: ESPACIADO.md },
-    texto: { fontSize: TIPOGRAFIA.pequeno },
+    texto: { fontSize: TIPOGRAFIA.pequeno, fontFamily: FUENTES.mono },
 });

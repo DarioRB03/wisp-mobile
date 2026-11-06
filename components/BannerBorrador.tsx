@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 
 type Props = {
     onRecuperar: () => void;
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: ESPACIADO.sm,
     },
-    texto: { color: COLORES.accentWarm, fontSize: TIPOGRAFIA.minimo, flex: 1 },
+    texto: { color: COLORES.accentWarm, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.minimo, flex: 1 },
     acciones: { flexDirection: "row", gap: ESPACIADO.sm },
-    enlaceAmbar: { color: COLORES.accentWarm, fontSize: TIPOGRAFIA.minimo, textDecorationLine: "underline" },
-    enlaceMuted: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.minimo, textDecorationLine: "underline" },
+    enlaceAmbar: { color: COLORES.accentWarm, fontFamily: FUENTES.cuerpoMedio, fontSize: TIPOGRAFIA.minimo, textDecorationLine: "underline" },
+    enlaceMuted: { color: COLORES.textMuted, fontFamily: FUENTES.cuerpoMedio, fontSize: TIPOGRAFIA.minimo, textDecorationLine: "underline" },
 });

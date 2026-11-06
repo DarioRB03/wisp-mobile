@@ -3,7 +3,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 import BotonConRebote from "./BotonConRebote";
 
@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
     contenedor: { width: "100%", marginTop: ESPACIADO.xl - 4, gap: ESPACIADO.md },
     caja: { width: "100%", borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.sm, padding: ESPACIADO.md, gap: ESPACIADO.sm },
     cabecera: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.sm, marginBottom: ESPACIADO.xs },
-    etiquetaFormato: { color: COLORES.text, fontSize: TIPOGRAFIA.cuerpo, fontWeight: "500" },
-    texto: { color: COLORES.text, fontSize: TIPOGRAFIA.pequeno + 1 },
+    etiquetaFormato: { color: COLORES.text, fontFamily: FUENTES.cuerpoMedio, fontSize: TIPOGRAFIA.cuerpo },
+    texto: { color: COLORES.text, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno + 1 },
     botonPequeno: { borderRadius: RADIOS.sm, paddingVertical: ESPACIADO.sm, alignItems: "center" },
-    botonTextoPequeno: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.minimo + 1 },
+    botonTextoPequeno: { color: "white", fontFamily: FUENTES.cuerpoNegro, fontSize: TIPOGRAFIA.minimo + 1 },
 });

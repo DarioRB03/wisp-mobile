@@ -30,3 +30,12 @@ export const TIPOGRAFIA = {
   pequeno: 12,
   minimo: 11,
 };
+
+export const FUENTES = {
+  display:     "Fraunces-SemiBold",
+  cuerpo:      "Manrope-Regular",
+  cuerpoMedio: "Manrope-Medium",
+  cuerpoNegro: "Manrope-SemiBold",
+  mono:        "IBMPlexMono-Regular",
+  monoMedio:   "IBMPlexMono-Medium",
+};

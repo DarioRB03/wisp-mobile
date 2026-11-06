@@ -3,7 +3,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS } from "../lib/destinos";
 
 type Nota = {
@@ -136,14 +136,14 @@ const styles = StyleSheet.create({
     asa: { width: 36, height: 4, borderRadius: 2, backgroundColor: COLORES.border, alignSelf: "center", marginBottom: ESPACIADO.md },
     header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: ESPACIADO.md },
     headerIzq: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.xs + 2 },
-    fecha: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.minimo },
+    fecha: { color: COLORES.textMuted, fontFamily: FUENTES.mono, fontSize: TIPOGRAFIA.minimo },
     botonCerrar: { width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: COLORES.border, alignItems: "center", justifyContent: "center" },
     iconoCerrar: { color: COLORES.textMuted, fontSize: 14, lineHeight: 16 },
-    post: { color: COLORES.text, fontSize: TIPOGRAFIA.cuerpo, lineHeight: 20 },
+    post: { color: COLORES.text, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.cuerpo, lineHeight: 20 },
     filaFeedback: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.xs + 2, marginTop: ESPACIADO.md, flexWrap: "wrap" },
-    pregunta: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.minimo, marginRight: ESPACIADO.xs },
+    pregunta: { color: COLORES.textMuted, fontFamily: FUENTES.mono, fontSize: TIPOGRAFIA.minimo, marginRight: ESPACIADO.xs },
     chip: { borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.full, paddingHorizontal: ESPACIADO.sm + 2, paddingVertical: ESPACIADO.xs },
     filaBotones: { flexDirection: "row", gap: ESPACIADO.sm, marginTop: ESPACIADO.md },
     boton: { flex: 1, borderRadius: RADIOS.sm, paddingVertical: ESPACIADO.sm + 2, alignItems: "center" },
-    botonTexto: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.pequeno },
+    botonTexto: { color: "white", fontFamily: FUENTES.cuerpoNegro, fontSize: TIPOGRAFIA.pequeno },
 });

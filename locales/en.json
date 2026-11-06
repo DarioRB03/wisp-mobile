@@ -22,7 +22,8 @@
         "cerrar": "Close",
         "volver": "← Back",
         "cargando": "Loading...",
-        "generando": "Generating..."
+        "generando": "Generating...",
+        "cancelar": "Cancel"
     },
     "auth": {
         "login": "Sign in",
@@ -71,7 +72,10 @@
         "borradorAviso": "You have an unfinished draft",
         "recuperar": "Restore",
         "descartar": "Discard",
-        "sinVoz": "No speech detected. Please try again."
+        "sinVoz": "No speech detected. Please try again.",
+        "reemplazarTitulo": "Replace text?",
+        "reemplazarMensaje": "You've edited the current text. Replace it with the new recording?",
+        "reemplazar": "Replace"
     },
     "generar": {
         "boton": "Generate post",

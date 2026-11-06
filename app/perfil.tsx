@@ -4,7 +4,7 @@ import { ActivityIndicator, Keyboard, StyleSheet, Text, TextInput, TouchableOpac
 import SelectorIdioma from "../components/SelectorIdioma";
 import SkeletonPerfil from "../components/SkeletonPerfil";
 import TabBar from "../components/TabBar";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { guardarPerfil, obtenerPerfil } from "../lib/api";
 import { supabase } from "../lib/supabase";
 
@@ -99,10 +99,10 @@ const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORES.bg, paddingTop: 60 },
     header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: ESPACIADO.lg, marginBottom: ESPACIADO.lg },
     headerDer: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.md },
-    titulo: { fontSize: TIPOGRAFIA.subtitulo, fontWeight: "600", color: COLORES.text },
-    enlace: { color: COLORES.danger, fontSize: TIPOGRAFIA.pequeno },
+    titulo: { fontSize: TIPOGRAFIA.subtitulo, fontFamily: FUENTES.display, color: COLORES.text },
+    enlace: { color: COLORES.danger, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno },
     contenido: { paddingHorizontal: ESPACIADO.lg, paddingBottom: 90 },
-    descripcion: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.pequeno, marginBottom: ESPACIADO.lg },
+    descripcion: { color: COLORES.textMuted, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginBottom: ESPACIADO.lg },
     input: {
         borderWidth: 1,
         borderColor: COLORES.border,
@@ -110,14 +110,15 @@ const styles = StyleSheet.create({
         padding: ESPACIADO.md,
         color: COLORES.text,
         fontSize: TIPOGRAFIA.cuerpo,
+        fontFamily: FUENTES.cuerpo,
         minHeight: 120,
         textAlignVertical: "top",
     },
     boton: { backgroundColor: COLORES.accentCool, borderRadius: RADIOS.sm, padding: ESPACIADO.md + 2, marginTop: ESPACIADO.md, alignItems: "center" },
-    botonTexto: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.cuerpo },
+    botonTexto: { color: "white", fontFamily: FUENTES.cuerpoNegro, fontSize: TIPOGRAFIA.cuerpo },
     botonEditar: { backgroundColor: COLORES.accentCool, borderRadius: RADIOS.sm, padding: ESPACIADO.md + 2, marginTop: ESPACIADO.md, alignItems: "center" },
-    botonEditarTexto: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.cuerpo },
+    botonEditarTexto: { color: "white", fontFamily: FUENTES.cuerpoNegro, fontSize: TIPOGRAFIA.cuerpo },
     vistaTexto: { borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.sm, padding: ESPACIADO.md, minHeight: 120 },
-    textoGuardado: { color: COLORES.text, fontSize: TIPOGRAFIA.cuerpo, lineHeight: 20 },
-    error: { color: "#F87171", fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
+    textoGuardado: { color: COLORES.text, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.cuerpo, lineHeight: 20 },
+    error: { color: "#F87171", fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
 });

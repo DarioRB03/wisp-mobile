@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { supabase } from "../lib/supabase";
 import SelectorIdioma from "./SelectorIdioma";
 
@@ -42,7 +42,7 @@ export default function PantallaAuth() {
             </View>
             <Text style={styles.titulo}>{t("app.nombre")}</Text>
             <Text style={styles.subtitulo}>{t("app.lema")}</Text>
-            <Text style={[styles.subtitulo, { marginTop: ESPACIADO.xl, marginBottom: ESPACIADO.md, fontSize: TIPOGRAFIA.subtitulo, color: COLORES.text }]}>
+            <Text style={[styles.subtitulo, { marginTop: ESPACIADO.xl, marginBottom: ESPACIADO.md, fontSize: TIPOGRAFIA.subtitulo, color: COLORES.text, fontFamily: FUENTES.cuerpoNegro }]}>
                 {modo === "login" ? t("auth.login") : t("auth.registro")}
             </Text>
             <TextInput
@@ -84,8 +84,8 @@ export default function PantallaAuth() {
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORES.bg, paddingHorizontal: ESPACIADO.xl },
     centrado: { justifyContent: "center", alignItems: "center" },
-    titulo: { fontSize: TIPOGRAFIA.titulo, fontWeight: "600", color: COLORES.text },
-    subtitulo: { fontSize: TIPOGRAFIA.pequeno, color: COLORES.textMuted, marginTop: ESPACIADO.xs },
+    titulo: { fontSize: TIPOGRAFIA.titulo, fontFamily: FUENTES.display, color: COLORES.accentWarm },
+    subtitulo: { fontSize: TIPOGRAFIA.pequeno, fontFamily: FUENTES.cuerpo, color: COLORES.textMuted, marginTop: ESPACIADO.xs },
     input: {
         width: "100%",
         borderWidth: 1,
@@ -95,10 +95,11 @@ const styles = StyleSheet.create({
         marginTop: ESPACIADO.sm,
         color: COLORES.text,
         fontSize: TIPOGRAFIA.cuerpo,
+        fontFamily: FUENTES.cuerpo,
     },
     boton: { width: "100%", backgroundColor: COLORES.accentCool, borderRadius: RADIOS.sm, padding: ESPACIADO.md + 2, marginTop: ESPACIADO.lg, alignItems: "center" },
-    botonTexto: { color: "white", fontWeight: "600", fontSize: TIPOGRAFIA.cuerpo },
-    enlace: { color: COLORES.accentCool, fontSize: TIPOGRAFIA.pequeno, textAlign: "center", marginTop: ESPACIADO.lg },
-    error: { color: "#F87171", fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
-    mensaje: { color: COLORES.accentWarm, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
+    botonTexto: { color: "white", fontFamily: FUENTES.cuerpoNegro, fontSize: TIPOGRAFIA.cuerpo },
+    enlace: { color: COLORES.accentCool, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, textAlign: "center", marginTop: ESPACIADO.lg },
+    error: { color: "#F87171", fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
+    mensaje: { color: COLORES.accentWarm, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
 });

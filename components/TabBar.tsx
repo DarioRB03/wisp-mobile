@@ -2,7 +2,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { router, usePathname } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { COLORES, ESPACIADO, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, TIPOGRAFIA } from "../constants/theme";
 
 const TABS = [
     { ruta: "/", icono: "microphone", etiqueta: "Grabar" },
@@ -61,6 +61,6 @@ const styles = StyleSheet.create({
     },
     etiqueta: {
         fontSize: TIPOGRAFIA.minimo,
-        fontWeight: "500",
+        fontFamily: FUENTES.cuerpoMedio,
     },
 });

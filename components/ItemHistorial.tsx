@@ -1,7 +1,7 @@
 import { FontAwesome6 } from "@expo/vector-icons";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS } from "../lib/destinos";
 
 type Props = {
@@ -46,7 +46,7 @@ export default function ItemHistorial({ formato, fecha, post, onPress, onElimina
 const styles = StyleSheet.create({
     tarjeta: { backgroundColor: COLORES.surface, borderRadius: RADIOS.sm, borderWidth: 1, borderColor: COLORES.border, padding: ESPACIADO.md },
     fila: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: ESPACIADO.xs + 2 },
-    fecha: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.minimo },
-    post: { color: COLORES.text, fontSize: TIPOGRAFIA.pequeno + 1 },
+    fecha: { color: COLORES.textMuted, fontFamily: FUENTES.mono, fontSize: TIPOGRAFIA.minimo },
+    post: { color: COLORES.text, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno + 1 },
     accion: { backgroundColor: COLORES.danger, borderRadius: RADIOS.sm, justifyContent: "center", alignItems: "center", width: 64, marginLeft: ESPACIADO.sm },
 });

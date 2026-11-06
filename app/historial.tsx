@@ -5,7 +5,7 @@ import ItemHistorial from "../components/ItemHistorial";
 import ModalNota from "../components/ModalNota";
 import SkeletonHistorial from "../components/SkeletonHistorial";
 import TabBar from "../components/TabBar";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { borrarNota, enviarFeedback, obtenerHistorial } from "../lib/api";
 
 type Nota = {
@@ -98,7 +98,7 @@ export default function Historial() {
                                         onPress={() => setFiltro(f.valor)}
                                         style={[styles.chip, { backgroundColor: activo ? COLORES.accentCool : "transparent", borderColor: activo ? COLORES.accentCool : COLORES.border }]}
                                     >
-                                        <Text style={{ color: activo ? "white" : COLORES.textMuted, fontSize: TIPOGRAFIA.minimo }}>{etiqueta}</Text>
+                                        <Text style={{ color: activo ? "white" : COLORES.textMuted, fontSize: TIPOGRAFIA.minimo, fontFamily: FUENTES.cuerpoMedio }}>{etiqueta}</Text>
                                     </TouchableOpacity>
                                 );
                             })}
@@ -152,13 +152,13 @@ export default function Historial() {
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORES.bg, paddingTop: 60 },
     header: { paddingHorizontal: ESPACIADO.lg, marginBottom: ESPACIADO.sm + 2 },
-    titulo: { fontSize: TIPOGRAFIA.subtitulo, fontWeight: "600", color: COLORES.text },
-    error: { color: "#F87171", textAlign: "center", marginTop: ESPACIADO.xxl + 8 },
-    vacio: { color: COLORES.textMuted, textAlign: "center", marginTop: ESPACIADO.xxl + 8, fontSize: TIPOGRAFIA.pequeno },
+    titulo: { fontSize: TIPOGRAFIA.subtitulo, fontFamily: FUENTES.display, color: COLORES.text },
+    error: { color: "#F87171", fontFamily: FUENTES.cuerpo, textAlign: "center", marginTop: ESPACIADO.xxl + 8 },
+    vacio: { color: COLORES.textMuted, fontFamily: FUENTES.cuerpo, textAlign: "center", marginTop: ESPACIADO.xxl + 8, fontSize: TIPOGRAFIA.pequeno },
     controles: { paddingHorizontal: ESPACIADO.lg, gap: ESPACIADO.sm },
     filtrosFila: { flexDirection: "row", gap: ESPACIADO.xs + 2 },
     chip: { borderWidth: 1, borderRadius: RADIOS.full, paddingHorizontal: ESPACIADO.sm + 2, paddingVertical: ESPACIADO.xs },
     ordenFila: { flexDirection: "row", justifyContent: "flex-end" },
     ordenBtn: { paddingVertical: ESPACIADO.xs, paddingHorizontal: ESPACIADO.sm },
-    ordenTexto: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.minimo },
+    ordenTexto: { color: COLORES.textMuted, fontFamily: FUENTES.mono, fontSize: TIPOGRAFIA.minimo },
 });

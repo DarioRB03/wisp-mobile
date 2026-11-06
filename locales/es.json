@@ -22,7 +22,8 @@
         "cerrar": "Cerrar",
         "volver": "← Volver",
         "cargando": "Cargando...",
-        "generando": "Generando..."
+        "generando": "Generando...",
+        "cancelar": "Cancelar"
     },
     "auth": {
         "login": "Inicia sesión",
@@ -71,7 +72,10 @@
         "borradorAviso": "Tienes un borrador sin terminar",
         "recuperar": "Recuperar",
         "descartar": "Descartar",
-        "sinVoz": "No se ha detectado ninguna voz. Inténtalo de nuevo."
+        "sinVoz": "No se ha detectado ninguna voz. Inténtalo de nuevo.",
+        "reemplazarTitulo": "¿Reemplazar el texto?",
+        "reemplazarMensaje": "Has editado el texto actual. ¿Quieres reemplazarlo con la nueva grabación?",
+        "reemplazar": "Reemplazar"
     },
     "generar": {
         "boton": "Generar post",

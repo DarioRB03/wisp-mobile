@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { COLORES, ESPACIADO, RADIOS, TIPOGRAFIA } from "../constants/theme";
+import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 
 type Props = {
     tono: string;
@@ -26,7 +26,7 @@ export default function CampoTono({ tono, onCambiar }: Props) {
 
 const styles = StyleSheet.create({
     contenedor: { width: "100%", marginTop: ESPACIADO.md, gap: ESPACIADO.xs },
-    etiqueta: { color: COLORES.textMuted, fontSize: TIPOGRAFIA.pequeno },
+    etiqueta: { color: COLORES.textMuted, fontFamily: FUENTES.mono, fontSize: TIPOGRAFIA.pequeno },
     input: {
         width: "100%",
         borderWidth: 1,
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
         borderRadius: RADIOS.sm,
         padding: ESPACIADO.md,
         color: COLORES.text,
+        fontFamily: FUENTES.cuerpo,
         fontSize: TIPOGRAFIA.cuerpo,
     },
 });
