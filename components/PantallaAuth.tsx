@@ -6,11 +6,23 @@ import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/th
 import { supabase } from "../lib/supabase";
 import SelectorIdioma from "./SelectorIdioma";
 
+function localizarError(msg: string, t: (k: string) => string): string {
+    const m = msg.toLowerCase();
+    if (m.includes("invalid login credentials") || m.includes("invalid email or password")) return t("auth.errorCredenciales");
+    if (m.includes("email not confirmed")) return t("auth.errorEmailNoConfirmado");
+    if (m.includes("user already registered") || m.includes("already registered")) return t("auth.errorEmailRegistrado");
+    if (m.includes("password should be at least") || m.includes("password must be at least")) return t("auth.errorPasswordCorta");
+    if (m.includes("unable to validate email") || m.includes("invalid email")) return t("auth.errorEmailInvalido");
+    if (m.includes("rate limit") || m.includes("too many requests") || m.includes("email rate limit")) return t("auth.errorRateLimit");
+    return t("auth.errorGenerico");
+}
+
 export default function PantallaAuth() {
     const { t } = useTranslation();
-    const [modo, setModo] = useState<"login" | "registro">("login");
+    const [modo, setModo] = useState<"login" | "registro" | "recuperar">("login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [verPassword, setVerPassword] = useState(false);
     const [error, setError] = useState("");
     const [mensaje, setMensaje] = useState("");
     const [cargando, setCargando] = useState(false);
@@ -20,7 +32,11 @@ export default function PantallaAuth() {
         setMensaje("");
         setCargando(true);
         try {
-            if (modo === "registro") {
+            if (modo === "recuperar") {
+                const { error } = await supabase.auth.resetPasswordForEmail(email);
+                if (error) throw error;
+                setMensaje(t("auth.recuperarEnviado"));
+            } else if (modo === "registro") {
                 const { error, data } = await supabase.auth.signUp({ email, password });
                 if (error) throw error;
                 if (!data.session) setMensaje(t("auth.confirmacion"));
@@ -29,10 +45,17 @@ export default function PantallaAuth() {
                 if (error) throw error;
             }
         } catch (err: any) {
-            setError(err.message || t("auth.errorGenerico"));
+            setError(localizarError(err.message || "", t));
         } finally {
             setCargando(false);
         }
+    }
+
+    function cambiarModo(nuevoModo: "login" | "registro" | "recuperar") {
+        setModo(nuevoModo);
+        setError("");
+        setMensaje("");
+        setVerPassword(false);
     }
 
     return (
@@ -40,11 +63,20 @@ export default function PantallaAuth() {
             <View style={{ position: "absolute", top: ESPACIADO.xl, right: ESPACIADO.xl }}>
                 <SelectorIdioma />
             </View>
+
             <Text style={styles.titulo}>{t("app.nombre")}</Text>
             <Text style={styles.subtitulo}>{t("app.lema")}</Text>
-            <Text style={[styles.subtitulo, { marginTop: ESPACIADO.xl, marginBottom: ESPACIADO.md, fontSize: TIPOGRAFIA.subtitulo, color: COLORES.text, fontFamily: FUENTES.cuerpoNegro }]}>
-                {modo === "login" ? t("auth.login") : t("auth.registro")}
+
+            <Text style={[styles.subtitulo, {
+                marginTop: ESPACIADO.xl,
+                marginBottom: ESPACIADO.md,
+                fontSize: TIPOGRAFIA.subtitulo,
+                color: COLORES.text,
+                fontFamily: FUENTES.cuerpoNegro,
+            }]}>
+                {modo === "recuperar" ? t("auth.recuperar") : modo === "login" ? t("auth.login") : t("auth.registro")}
             </Text>
+
             <TextInput
                 style={styles.input}
                 placeholder={t("auth.email")}
@@ -53,29 +85,77 @@ export default function PantallaAuth() {
                 onChangeText={setEmail}
                 autoCapitalize="none"
                 keyboardType="email-address"
+                autoComplete="email"
             />
-            <TextInput
-                style={styles.input}
-                placeholder={t("auth.password")}
-                placeholderTextColor={COLORES.textMuted}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
+
+            {modo !== "recuperar" && (
+                <>
+                    <View style={styles.inputWrapper}>
+                        <TextInput
+                            style={[styles.input, { flex: 1, marginTop: 0, borderWidth: 0 }]}
+                            placeholder={t("auth.password")}
+                            placeholderTextColor={COLORES.textMuted}
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry={!verPassword}
+                            autoComplete={modo === "login" ? "current-password" : "new-password"}
+                        />
+                        <TouchableOpacity
+                            onPress={() => setVerPassword((v) => !v)}
+                            style={styles.togglePassword}
+                            accessibilityLabel={verPassword ? t("auth.ocultarPassword") : t("auth.mostrarPassword")}
+                        >
+                            <Text style={{ color: COLORES.textMuted, fontSize: 12 }}>
+                                {verPassword ? "●" : "○"}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {modo === "registro" && (
+                        <Text style={styles.hint}>{t("auth.passwordHint")}</Text>
+                    )}
+                </>
+            )}
+
             {error ? <Text style={styles.error}>{error}</Text> : null}
             {mensaje ? <Text style={styles.mensaje}>{mensaje}</Text> : null}
+
             <TouchableOpacity style={styles.boton} onPress={manejarSubmit} disabled={cargando}>
                 {cargando ? (
                     <ActivityIndicator color="white" />
                 ) : (
-                    <Text style={styles.botonTexto}>{modo === "login" ? t("auth.entrar") : t("auth.registrarme")}</Text>
+                    <Text style={styles.botonTexto}>
+                        {modo === "recuperar"
+                            ? t("auth.recuperarBoton")
+                            : modo === "login"
+                            ? t("auth.entrar")
+                            : t("auth.registrarme")}
+                    </Text>
                 )}
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setModo(modo === "login" ? "registro" : "login")}>
-                <Text style={styles.enlace}>
-                    {modo === "login" ? t("auth.sinCuenta") : t("auth.conCuenta")}
-                </Text>
-            </TouchableOpacity>
+
+            {modo === "login" && (
+                <>
+                    <TouchableOpacity onPress={() => cambiarModo("registro")}>
+                        <Text style={styles.enlace}>{t("auth.sinCuenta")}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => cambiarModo("recuperar")}>
+                        <Text style={[styles.enlace, { color: COLORES.textMuted, marginTop: ESPACIADO.xs }]}>
+                            {t("auth.olvidaste")}
+                        </Text>
+                    </TouchableOpacity>
+                </>
+            )}
+            {modo === "registro" && (
+                <TouchableOpacity onPress={() => cambiarModo("login")}>
+                    <Text style={styles.enlace}>{t("auth.conCuenta")}</Text>
+                </TouchableOpacity>
+            )}
+            {modo === "recuperar" && (
+                <TouchableOpacity onPress={() => cambiarModo("login")}>
+                    <Text style={[styles.enlace, { marginTop: ESPACIADO.md }]}>{t("auth.volverLogin")}</Text>
+                </TouchableOpacity>
+            )}
+
             <StatusBar style="light" />
         </View>
     );
@@ -97,9 +177,21 @@ const styles = StyleSheet.create({
         fontSize: TIPOGRAFIA.cuerpo,
         fontFamily: FUENTES.cuerpo,
     },
+    inputWrapper: {
+        flexDirection: "row",
+        alignItems: "center",
+        width: "100%",
+        borderWidth: 1,
+        borderColor: COLORES.border,
+        borderRadius: RADIOS.sm,
+        marginTop: ESPACIADO.sm,
+        paddingRight: ESPACIADO.md,
+    },
+    togglePassword: { padding: ESPACIADO.sm },
+    hint: { alignSelf: "flex-start", color: COLORES.textMuted, fontSize: TIPOGRAFIA.pequeno, fontFamily: FUENTES.cuerpo, marginTop: ESPACIADO.xs },
     boton: { width: "100%", backgroundColor: COLORES.accentCool, borderRadius: RADIOS.sm, padding: ESPACIADO.md + 2, marginTop: ESPACIADO.lg, alignItems: "center" },
     botonTexto: { color: "white", fontFamily: FUENTES.cuerpoNegro, fontSize: TIPOGRAFIA.cuerpo },
     enlace: { color: COLORES.accentCool, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, textAlign: "center", marginTop: ESPACIADO.lg },
-    error: { color: "#F87171", fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
-    mensaje: { color: COLORES.accentWarm, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm },
+    error: { color: "#F87171", fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm, textAlign: "center" },
+    mensaje: { color: COLORES.accentWarm, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.pequeno, marginTop: ESPACIADO.sm, textAlign: "center" },
 });
