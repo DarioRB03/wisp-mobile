@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { supabase } from "../lib/supabase";
 import SelectorIdioma from "./SelectorIdioma";
@@ -127,9 +128,11 @@ export default function PantallaAuth() {
                             style={styles.togglePassword}
                             accessibilityLabel={verPassword ? t("auth.ocultarPassword") : t("auth.mostrarPassword")}
                         >
-                            <Text style={{ color: COLORES.textMuted, fontSize: 12 }}>
-                                {verPassword ? "●" : "○"}
-                            </Text>
+                            <FontAwesome6
+                                name={verPassword ? "eye-slash" : "eye"}
+                                size={15}
+                                color={COLORES.textMuted}
+                            />
                         </TouchableOpacity>
                     </View>
                     {modo === "registro" && (
