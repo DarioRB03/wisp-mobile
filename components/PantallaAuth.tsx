@@ -26,6 +26,7 @@ export default function PantallaAuth() {
     const [error, setError] = useState("");
     const [mensaje, setMensaje] = useState("");
     const [cargando, setCargando] = useState(false);
+    const [emailPendiente, setEmailPendiente] = useState("");
 
     async function manejarSubmit() {
         setError("");
@@ -39,7 +40,10 @@ export default function PantallaAuth() {
             } else if (modo === "registro") {
                 const { error, data } = await supabase.auth.signUp({ email, password });
                 if (error) throw error;
-                if (!data.session) setMensaje(t("auth.confirmacion"));
+                if (!data.session) {
+                    setMensaje(t("auth.confirmacion"));
+                    setEmailPendiente(email);
+                }
             } else {
                 const { error } = await supabase.auth.signInWithPassword({ email, password });
                 if (error) throw error;
@@ -51,11 +55,25 @@ export default function PantallaAuth() {
         }
     }
 
+    async function reenviarConfirmacion() {
+        if (!emailPendiente) return;
+        setCargando(true);
+        try {
+            await supabase.auth.resend({ type: "signup", email: emailPendiente });
+            setMensaje(t("auth.confirmacionReenviada"));
+        } catch {
+            setError(t("auth.errorGenerico"));
+        } finally {
+            setCargando(false);
+        }
+    }
+
     function cambiarModo(nuevoModo: "login" | "registro" | "recuperar") {
         setModo(nuevoModo);
         setError("");
         setMensaje("");
         setVerPassword(false);
+        setEmailPendiente("");
     }
 
     return (
@@ -86,6 +104,8 @@ export default function PantallaAuth() {
                 autoCapitalize="none"
                 keyboardType="email-address"
                 autoComplete="email"
+                selectionColor={COLORES.accentCool}
+                cursorColor={COLORES.accentCool}
             />
 
             {modo !== "recuperar" && (
@@ -99,6 +119,8 @@ export default function PantallaAuth() {
                             onChangeText={setPassword}
                             secureTextEntry={!verPassword}
                             autoComplete={modo === "login" ? "current-password" : "new-password"}
+                            selectionColor={COLORES.accentCool}
+                            cursorColor={COLORES.accentCool}
                         />
                         <TouchableOpacity
                             onPress={() => setVerPassword((v) => !v)}
@@ -118,6 +140,13 @@ export default function PantallaAuth() {
 
             {error ? <Text style={styles.error}>{error}</Text> : null}
             {mensaje ? <Text style={styles.mensaje}>{mensaje}</Text> : null}
+            {emailPendiente ? (
+                <TouchableOpacity onPress={reenviarConfirmacion} disabled={cargando}>
+                    <Text style={[styles.enlace, { fontSize: TIPOGRAFIA.pequeno, color: COLORES.textMuted, marginTop: ESPACIADO.xs }]}>
+                        {t("auth.reenviarConfirmacion")}
+                    </Text>
+                </TouchableOpacity>
+            ) : null}
 
             <TouchableOpacity style={styles.boton} onPress={manejarSubmit} disabled={cargando}>
                 {cargando ? (

@@ -49,7 +49,9 @@
         "errorEmailRegistrado": "This email is already registered",
         "errorPasswordCorta": "Password must be at least 6 characters",
         "errorEmailInvalido": "Invalid email format",
-        "errorRateLimit": "Too many attempts. Please wait a few minutes and try again"
+        "errorRateLimit": "Too many attempts. Please wait a few minutes and try again",
+        "reenviarConfirmacion": "Didn't receive the email? Resend",
+        "confirmacionReenviada": "Confirmation email resent."
     },
     "modos": {
         "estandar": "Standard",

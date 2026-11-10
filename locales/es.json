@@ -49,7 +49,9 @@
         "errorEmailRegistrado": "Este correo ya está registrado",
         "errorPasswordCorta": "La contraseña debe tener al menos 6 caracteres",
         "errorEmailInvalido": "El formato del correo no es válido",
-        "errorRateLimit": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo"
+        "errorRateLimit": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo",
+        "reenviarConfirmacion": "¿No recibiste el correo? Reenviar",
+        "confirmacionReenviada": "Correo de confirmación reenviado."
     },
     "modos": {
         "estandar": "Estándar",
