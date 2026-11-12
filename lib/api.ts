@@ -157,13 +157,13 @@ export async function guardarPerfil(contexto: string): Promise<void> {
 }
 
 export async function obtenerFicha(): Promise<EstadoFicha> {
-    const res = await apiFetch("/ficha-voz");
+    const res = await apiFetch("/perfil/ficha");
     if (!res.ok) throw new Error("No se pudo obtener la ficha");
     return res.json();
 }
 
 export async function regenerarFicha(): Promise<FichaVoz> {
-    const res = await apiFetch("/ficha-voz/regenerar", { method: "POST" });
+    const res = await apiFetch("/perfil/ficha/regenerar", { method: "POST" });
     if (!res.ok) throw new Error("No se pudo regenerar la ficha");
     return (await res.json()).ficha;
 }

@@ -91,7 +91,7 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback, onAnot
                         </TouchableOpacity>
                     </View>
 
-                    <ScrollView style={{ maxHeight: 300 }}>
+                    <ScrollView style={styles.postScroll} contentContainerStyle={{ flexGrow: 1 }}>
                         <Text style={styles.post}>{nota.post}</Text>
                     </ScrollView>
 
@@ -155,7 +155,8 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback, onAnot
 
 const styles = StyleSheet.create({
     fondo: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "flex-end" },
-    caja: { backgroundColor: COLORES.surface, borderTopWidth: 1, borderTopColor: COLORES.border, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: ESPACIADO.lg, paddingTop: ESPACIADO.md },
+    caja: { backgroundColor: COLORES.surface, borderTopWidth: 1, borderTopColor: COLORES.border, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: ESPACIADO.lg, paddingTop: ESPACIADO.md, maxHeight: "85%" },
+    postScroll: { maxHeight: "60%", minHeight: 60 },
     asa: { width: 36, height: 4, borderRadius: 2, backgroundColor: COLORES.border, alignSelf: "center", marginBottom: ESPACIADO.md },
     header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: ESPACIADO.md },
     headerIzq: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.xs + 2 },
