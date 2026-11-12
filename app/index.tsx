@@ -22,6 +22,7 @@ import CampoTono from "../components/CampoTono";
 import ContadorUso from "../components/ContadorUso";
 import Fade from "../components/Fade";
 import GrabadorAudio from "../components/GrabadorAudio";
+import InspiracionPanel from "../components/InspiracionPanel";
 import PantallaAuth from "../components/PantallaAuth";
 import ResultadoComparativa from "../components/ResultadoComparativa";
 import ResultadoEstandar from "../components/ResultadoEstandar";
@@ -33,6 +34,28 @@ import SelectorModo from "../components/SelectorModo";
 type Modo = "estandar" | "personalizado" | "comparativa";
 
 const CLAVE_BORRADOR = "wisp-borrador";
+
+function NivelBotones({ onPress }: { onPress: (nivel: "pulir" | "libre") => void }) {
+  const { t } = useTranslation();
+  return (
+    <View style={{ flexDirection: "row", alignItems: "center", gap: ESPACIADO.sm, marginTop: ESPACIADO.sm }}>
+      <Text style={{ fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.minimo + 1, color: COLORES.textMuted, flex: 1 }}>
+        {t("nivelEdicion.regenerar")}
+      </Text>
+      {(["pulir", "libre"] as const).map((nivel) => (
+        <TouchableOpacity
+          key={nivel}
+          onPress={() => onPress(nivel)}
+          style={{ borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.sm, paddingHorizontal: ESPACIADO.md, paddingVertical: ESPACIADO.xs }}
+        >
+          <Text style={{ fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.minimo + 1, color: COLORES.textMuted }}>
+            {t(nivel === "pulir" ? "nivelEdicion.masPulido" : "nivelEdicion.masLibre")}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+}
 
 export default function Index() {
   const [session, setSession] = useState<Session | null>(null);
@@ -83,6 +106,7 @@ function PantallaPrincipal() {
   const [variantes, setVariantes] = useState<{ tono: string; post: string }[]>([]);
   const [postSimple, setPostSimple] = useState("");
   const [comparativa, setComparativa] = useState<{ formato: string; post: string }[]>([]);
+  const [textoOriginal, setTextoOriginal] = useState("");
 
   const [uso, setUso] = useState<{ usadas: number; limite: number; restantes: number; racha: number } | null>(null);
   const [error, setError] = useState("");
@@ -166,26 +190,27 @@ function PantallaPrincipal() {
     }
   }
 
-  async function generar() {
+  async function generar(nivel = "equilibrado", texto = transcripcion) {
     setGenerando(true);
     setError("");
     limpiarResultados();
+    setTextoOriginal(texto);
 
     try {
       if (modo === "estandar") {
-        setVariantes(await generarPost(transcripcion, formato));
+        setVariantes(await generarPost(texto, formato, nivel));
       } else if (modo === "personalizado") {
         if (!tonoPersonalizado.trim()) {
           setError(t("generar.errorTono"));
           return;
         }
-        setPostSimple(await generarTonoPersonalizado(transcripcion, formato, tonoPersonalizado));
+        setPostSimple(await generarTonoPersonalizado(texto, formato, tonoPersonalizado, nivel));
       } else if (modo === "comparativa") {
         if (formatosMultiples.length < 2) {
           setError(t("generar.errorFormatos"));
           return;
         }
-        setComparativa(await generarComparativa(transcripcion, formatosMultiples));
+        setComparativa(await generarComparativa(texto, formatosMultiples, nivel));
       }
       cargarUso();
     } catch (err: any) {
@@ -195,9 +220,13 @@ function PantallaPrincipal() {
     }
   }
 
-  async function guardar(post: string, formatoUsado: string = formato) {
+  function regenerarCon(nivel: "pulir" | "libre") {
+    generar(nivel, textoOriginal);
+  }
+
+  async function guardar(post: string, formatoUsado: string = formato): Promise<string> {
     try {
-      await guardarPost(transcripcion, post, formatoUsado);
+      return await guardarPost(transcripcion, post, formatoUsado);
     } catch (err: any) {
       setError(err.message || t("generar.errorGuardar"));
       throw err;
@@ -239,6 +268,10 @@ function PantallaPrincipal() {
           </View>
         )}
 
+        <View style={{ width: "100%", marginTop: ESPACIADO.lg }}>
+          <InspiracionPanel onUsar={(texto) => { setTranscripcion(texto); setTranscripcionEditada(false); limpiarResultados(); }} />
+        </View>
+
         <GrabadorAudio
           grabando={grabando}
           transcribiendo={transcribiendo}
@@ -262,7 +295,7 @@ function PantallaPrincipal() {
               onChangeText={(v) => { setTranscripcion(v); setTranscripcionEditada(true); }}
               multiline
             />
-            <TouchableOpacity style={styles.boton} onPress={generar} disabled={generando}>
+            <TouchableOpacity style={styles.boton} onPress={() => generar()} disabled={generando}>
               {generando ? <ActivityIndicator color="white" /> : <Text style={styles.botonTexto}>{t("generar.boton")}</Text>}
             </TouchableOpacity>
           </Fade>
@@ -271,11 +304,13 @@ function PantallaPrincipal() {
         {modo === "estandar" && variantes.length > 0 && (
           <Fade style={{ width: "100%" }}>
             <ResultadoEstandar variantes={variantes} formato={formato} onGuardar={(post) => guardar(post, formato)} />
+            <NivelBotones onPress={regenerarCon} />
           </Fade>
         )}
         {modo === "personalizado" && postSimple && (
           <Fade style={{ width: "100%" }}>
             <ResultadoSimple post={postSimple} formato={formato} onGuardar={(post) => guardar(post, formato)} />
+            <NivelBotones onPress={regenerarCon} />
           </Fade>
         )}
         {modo === "comparativa" && comparativa.length > 0 && (

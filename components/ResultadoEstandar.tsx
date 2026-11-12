@@ -6,13 +6,14 @@ import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/th
 import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 import BotonConRebote from "./BotonConRebote";
 import SelectorPill from "./SelectorPill";
+import FeedbackPost from "./FeedbackPost";
 
 type Variante = { tono: string; post: string };
 
 type Props = {
     variantes: Variante[];
     formato: string;
-    onGuardar: (post: string) => Promise<void>;
+    onGuardar: (post: string) => Promise<string>;
 };
 
 export default function ResultadoEstandar({ variantes, formato, onGuardar }: Props) {
@@ -20,12 +21,14 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
     const [activa, setActiva] = useState(0);
     const [guardado, setGuardado] = useState(false);
     const [copiado, setCopiado] = useState(false);
+    const [postId, setPostId] = useState<string | null>(null);
 
     const destino = DESTINOS[formato];
 
     async function guardar() {
-        await onGuardar(variantes[activa].post);
+        const id = await onGuardar(variantes[activa].post);
         setGuardado(true);
+        setPostId(id);
     }
 
     async function copiar() {
@@ -76,6 +79,8 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
             >
                 <Text style={[styles.botonTexto, { color: COLORES.textMuted }]}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </BotonConRebote>
+
+            <FeedbackPost postId={postId} />
         </View>
     );
 }

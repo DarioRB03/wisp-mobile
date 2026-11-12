@@ -23,7 +23,11 @@
         "volver": "← Back",
         "cargando": "Loading...",
         "generando": "Generating...",
-        "cancelar": "Cancel"
+        "cancelar": "Cancel",
+        "editarPost": "Edit post",
+        "editarConfirmar": "Done",
+        "meGusta": "I liked this",
+        "noMeGusta": "Not for me"
     },
     "auth": {
         "login": "Sign in",
@@ -52,6 +56,10 @@
         "errorRateLimit": "Too many attempts. Please wait a few minutes and try again",
         "reenviarConfirmacion": "Didn't receive the email? Resend",
         "confirmacionReenviada": "Confirmation email resent."
+    },
+    "onboarding": {
+        "banner": "Help Wisp sound like you — tell it who you are and how you want to sound.",
+        "completarPerfil": "Complete profile"
     },
     "modos": {
         "estandar": "Standard",
@@ -89,8 +97,8 @@
         "recuperar": "Restore",
         "descartar": "Discard",
         "sinVoz": "No speech detected. Please try again.",
-        "reemplazarTitulo": "Replace text?",
-        "reemplazarMensaje": "You've edited the current text. Replace it with the new recording?",
+        "reemplazarTitulo": "Replace the text?",
+        "reemplazarMensaje": "You've edited the current text. Do you want to replace it with the new recording?",
         "reemplazar": "Replace"
     },
     "generar": {
@@ -129,15 +137,87 @@
         "noUtil": "👎 Not useful",
         "errorCargar": "Couldn't load your history."
     },
+    "feedback": {
+        "motivoTitulo": "What went wrong?",
+        "motivo_no_suena_a_mi": "Doesn't sound like me",
+        "motivo_demasiado_formal": "Too formal",
+        "motivo_demasiado_largo": "Too long",
+        "motivo_inventa_cosas": "Makes things up",
+        "motivo_estructura_ia": "AI structure",
+        "motivo_otro": "Other",
+        "omitir": "Skip",
+        "anotado": "Noted, I'll keep it in mind next time ✓",
+        "motivoEtiqueta": "Reason"
+    },
+    "ficha": {
+        "titulo": "What Wisp has learned about you",
+        "vacia": "Wisp starts learning your voice once you save {{minimo}} posts. You have {{actual}}.",
+        "actualizar": "Update now",
+        "actualizando": "Analysing your posts...",
+        "comoEscribes": "How you write",
+        "expresiones": "Your expressions",
+        "correcciones": "You usually fix",
+        "evitar": "You've rejected",
+        "temas": "Topics you post about",
+        "posturas": "Positions you hold",
+        "actualizada": "Updated {{fecha}} · refreshes itself every 5 saved posts",
+        "error": "Couldn't update the voice profile."
+    },
+    "nivelEdicion": {
+        "pulir": "Polish",
+        "equilibrado": "Balanced",
+        "libre": "Free rewrite",
+        "regenerar": "Regenerate:",
+        "masPulido": "More polished",
+        "masLibre": "Freer version"
+    },
+    "ideas": {
+        "titulo": "Saved ideas",
+        "placeholder": "Write an idea for later...",
+        "guardar": "Save",
+        "vacio": "No ideas saved yet.",
+        "usar": "Use"
+    },
+    "sugerencias": {
+        "titulo": "Topics you usually post about:",
+        "prefijo": "I want to talk about {{tema}}"
+    },
+    "vozInicial": {
+        "titulo": "Tell Wisp how you write",
+        "descripcion": "Wisp will learn on its own from your first {{minimo}} posts. Tell it how you write in the meantime.",
+        "estiloLabel": "How would you describe your style?",
+        "estiloPlaceholder": "E.g. direct, with irony, very short sentences, no fluff...",
+        "evitarLabel": "What do you want to avoid in your posts?",
+        "evitarPlaceholder": "E.g. empty motivation, numbered lists, generic advice...",
+        "expresionesLabel": "Phrases or words you use a lot?",
+        "expresionesPlaceholder": "E.g. honestly, look, here's the thing...",
+        "guardar": "Save"
+    },
+    "inspiracion": {
+        "titulo": "Inspiration"
+    },
     "perfil": {
         "titulo": "Your profile",
-        "descripcion": "Tell us what you do and what you want to achieve. Wisp will use this to tailor the content to you, so you don't have to repeat it every time.",
+        "descripcion": "Tell Wisp who you are and how you want to sound. It will use this to personalize every post.",
         "placeholder": "E.g. I'm a backend developer moving into AI Engineering...",
         "guardar": "Save profile",
         "guardando": "Saving...",
         "guardado": "Saved ✓",
         "editar": "Edit profile",
         "errorCargar": "Couldn't load your profile.",
-        "errorGuardar": "Couldn't save your profile."
+        "errorGuardar": "Couldn't save your profile.",
+        "perfilActivo": "Your profile is active · Wisp uses it to personalize your posts",
+        "sector": "What do you do?",
+        "sectorPlaceholder": "E.g. HR Consultant, Software Developer, Leadership Coach...",
+        "audiencia": "Who do you talk to?",
+        "audienciaPlaceholder": "E.g. SME directors, Entrepreneurs, Junior developers...",
+        "estiloLabel": "How do you want to sound?",
+        "estilo_directo": "Direct",
+        "estilo_reflexivo": "Thoughtful",
+        "estilo_cercano": "Casual",
+        "estilo_tecnico": "Technical",
+        "postsReferencia": "Reference posts",
+        "postsReferenciaDesc": "Paste 1-2 of your published posts that represent how you want to sound. This is the key to making Wisp match your real voice.",
+        "postsReferenciaPlaceholder": "Paste your best posts here..."
     }
 }

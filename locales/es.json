@@ -23,7 +23,11 @@
         "volver": "← Volver",
         "cargando": "Cargando...",
         "generando": "Generando...",
-        "cancelar": "Cancelar"
+        "cancelar": "Cancelar",
+        "editarPost": "Editar post",
+        "editarConfirmar": "Listo",
+        "meGusta": "Me ha gustado",
+        "noMeGusta": "No me ha gustado"
     },
     "auth": {
         "login": "Inicia sesión",
@@ -52,6 +56,10 @@
         "errorRateLimit": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo",
         "reenviarConfirmacion": "¿No recibiste el correo? Reenviar",
         "confirmacionReenviada": "Correo de confirmación reenviado."
+    },
+    "onboarding": {
+        "banner": "Para que Wisp suene como tú, cuéntale quién eres y cómo quieres sonar.",
+        "completarPerfil": "Completar perfil"
     },
     "modos": {
         "estandar": "Estándar",
@@ -129,15 +137,87 @@
         "noUtil": "👎 No útil",
         "errorCargar": "No se pudo cargar el historial."
     },
+    "feedback": {
+        "motivoTitulo": "¿Qué ha fallado?",
+        "motivo_no_suena_a_mi": "No suena a mí",
+        "motivo_demasiado_formal": "Demasiado formal",
+        "motivo_demasiado_largo": "Demasiado largo",
+        "motivo_inventa_cosas": "Se inventa cosas",
+        "motivo_estructura_ia": "Estructura de IA",
+        "motivo_otro": "Otro",
+        "omitir": "Omitir",
+        "anotado": "Anotado, lo tendré en cuenta la próxima vez ✓",
+        "motivoEtiqueta": "Motivo"
+    },
+    "ficha": {
+        "titulo": "Lo que Wisp ha aprendido de ti",
+        "vacia": "Wisp empieza a aprender tu voz cuando guardes {{minimo}} posts. Llevas {{actual}}.",
+        "actualizar": "Actualizar ahora",
+        "actualizando": "Analizando tus posts...",
+        "comoEscribes": "Cómo escribes",
+        "expresiones": "Expresiones tuyas",
+        "correcciones": "Sueles corregir",
+        "evitar": "Has rechazado",
+        "temas": "Temas sobre los que publicas",
+        "posturas": "Posturas que defiendes",
+        "actualizada": "Actualizada el {{fecha}} · se renueva sola cada 5 posts guardados",
+        "error": "No se pudo actualizar la ficha."
+    },
+    "nivelEdicion": {
+        "pulir": "Pulir",
+        "equilibrado": "Equilibrado",
+        "libre": "Libre",
+        "regenerar": "Regenerar:",
+        "masPulido": "Más pulida",
+        "masLibre": "Más libre"
+    },
+    "ideas": {
+        "titulo": "Ideas guardadas",
+        "placeholder": "Escribe una idea para más tarde...",
+        "guardar": "Guardar",
+        "vacio": "Aún no tienes ideas guardadas.",
+        "usar": "Usar"
+    },
+    "sugerencias": {
+        "titulo": "Sobre lo que sueles publicar:",
+        "prefijo": "Quiero hablar de {{tema}}"
+    },
+    "vozInicial": {
+        "titulo": "Cuéntale a Wisp cómo escribes",
+        "descripcion": "Wisp aprenderá sola a partir de tus {{minimo}} primeros posts. Cuéntale cómo eres mientras tanto.",
+        "estiloLabel": "¿Cómo describirías tu estilo?",
+        "estiloPlaceholder": "Ej: directo, con ironía, frases muy cortas, sin florituras...",
+        "evitarLabel": "¿Qué quieres evitar en tus posts?",
+        "evitarPlaceholder": "Ej: motivación vacía, listas numeradas, consejos genéricos...",
+        "expresionesLabel": "¿Expresiones o palabras que usas mucho?",
+        "expresionesPlaceholder": "Ej: a ver, pues eso, seamos honestos, oye...",
+        "guardar": "Guardar"
+    },
+    "inspiracion": {
+        "titulo": "Inspiración"
+    },
     "perfil": {
         "titulo": "Tu perfil",
-        "descripcion": "Cuéntanos a qué te dedicas y qué buscas conseguir. Wisp usará esto para ajustar el contenido a tu perfil, sin que tengas que repetirlo cada vez.",
+        "descripcion": "Cuéntale a Wisp quién eres y cómo quieres sonar. Usará esta información para personalizar cada post.",
         "placeholder": "Ej: Soy desarrollador backend pivotando hacia AI Engineering...",
         "guardar": "Guardar perfil",
         "guardando": "Guardando...",
         "guardado": "Guardado ✓",
         "editar": "Editar perfil",
         "errorCargar": "No se pudo cargar tu perfil.",
-        "errorGuardar": "No se pudo guardar el perfil."
+        "errorGuardar": "No se pudo guardar el perfil.",
+        "perfilActivo": "Tu perfil está activo · Wisp lo usa para personalizar tus posts",
+        "sector": "¿A qué te dedicas?",
+        "sectorPlaceholder": "Ej: Consultor de RRHH, Desarrollador de software, Coach de liderazgo...",
+        "audiencia": "¿A quién le hablas?",
+        "audienciaPlaceholder": "Ej: Directivos de pymes, Emprendedores, Desarrolladores junior...",
+        "estiloLabel": "¿Cómo quieres sonar?",
+        "estilo_directo": "Directo",
+        "estilo_reflexivo": "Reflexivo",
+        "estilo_cercano": "Cercano",
+        "estilo_tecnico": "Técnico",
+        "postsReferencia": "Posts de referencia",
+        "postsReferenciaDesc": "Pega 1-2 posts tuyos que ya hayas publicado y que representen cómo quieres sonar. Es la clave para que Wisp imite tu voz real.",
+        "postsReferenciaPlaceholder": "Pega aquí tus mejores posts..."
     }
 }

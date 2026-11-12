@@ -6,24 +6,27 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 import BotonConRebote from "./BotonConRebote";
+import FeedbackPost from "./FeedbackPost";
 
 type Item = { formato: string; post: string };
 
 type Props = {
     resultados: Item[];
-    onGuardar: (post: string, formato: string) => Promise<void>;
+    onGuardar: (post: string, formato: string) => Promise<string>;
 };
 
-function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post: string, formato: string) => Promise<void> }) {
+function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post: string, formato: string) => Promise<string> }) {
     const { t } = useTranslation();
     const [guardado, setGuardado] = useState(false);
     const [copiado, setCopiado] = useState(false);
+    const [postId, setPostId] = useState<string | null>(null);
 
     const destino = DESTINOS[item.formato];
 
     async function guardar() {
-        await onGuardar(item.post, item.formato);
+        const id = await onGuardar(item.post, item.formato);
         setGuardado(true);
+        setPostId(id);
     }
 
     async function copiar() {
@@ -65,6 +68,8 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
             >
                 <Text style={[styles.botonTextoPequeno, { color: COLORES.textMuted }]}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </BotonConRebote>
+
+            <FeedbackPost postId={postId} />
         </View>
     );
 }

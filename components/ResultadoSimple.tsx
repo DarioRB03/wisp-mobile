@@ -5,23 +5,26 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 import BotonConRebote from "./BotonConRebote";
+import FeedbackPost from "./FeedbackPost";
 
 type Props = {
     post: string;
     formato: string;
-    onGuardar: (post: string) => Promise<void>;
+    onGuardar: (post: string) => Promise<string>;
 };
 
 export default function ResultadoSimple({ post, formato, onGuardar }: Props) {
     const { t } = useTranslation();
     const [guardado, setGuardado] = useState(false);
     const [copiado, setCopiado] = useState(false);
+    const [postId, setPostId] = useState<string | null>(null);
 
     const destino = DESTINOS[formato];
 
     async function guardar() {
-        await onGuardar(post);
+        const id = await onGuardar(post);
         setGuardado(true);
+        setPostId(id);
     }
 
     async function copiar() {
@@ -56,6 +59,8 @@ export default function ResultadoSimple({ post, formato, onGuardar }: Props) {
             >
                 <Text style={[styles.botonTexto, { color: COLORES.textMuted }]}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
             </BotonConRebote>
+
+            <FeedbackPost postId={postId} />
         </View>
     );
 }
