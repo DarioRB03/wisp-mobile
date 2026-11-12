@@ -257,6 +257,7 @@ function PantallaPrincipal() {
 
         <SelectorModo
           modo={modo}
+          bloqueado={generando || variantes.length > 0 || !!postSimple || comparativa.length > 0}
           onCambiar={(m) => {
             setModo(m);
             limpiarResultados();
@@ -264,9 +265,19 @@ function PantallaPrincipal() {
         />
 
         <Fade key={modo} style={{ width: "100%", alignItems: "center" }}>
-          {modo !== "comparativa" && <SelectorFormato formato={formato} onCambiar={setFormato} />}
+          {modo !== "comparativa" && (
+            <SelectorFormato
+              formato={formato}
+              onCambiar={setFormato}
+              bloqueado={generando || variantes.length > 0 || !!postSimple || comparativa.length > 0}
+            />
+          )}
           {modo === "comparativa" && (
-            <SelectorFormatosMultiple seleccionados={formatosMultiples} onCambiar={setFormatosMultiples} />
+            <SelectorFormatosMultiple
+              seleccionados={formatosMultiples}
+              onCambiar={setFormatosMultiples}
+              bloqueado={generando || comparativa.length > 0}
+            />
           )}
           {modo === "personalizado" && <CampoTono tono={tonoPersonalizado} onCambiar={setTonoPersonalizado} />}
         </Fade>

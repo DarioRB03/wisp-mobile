@@ -8,21 +8,22 @@ type Modo = "estandar" | "personalizado" | "comparativa";
 type Props = {
     modo: Modo;
     onCambiar: (modo: Modo) => void;
+    bloqueado?: boolean;
 };
 
 const OPCIONES: Modo[] = ["estandar", "personalizado", "comparativa"];
 
-export default function SelectorModo({ modo, onCambiar }: Props) {
+export default function SelectorModo({ modo, onCambiar, bloqueado }: Props) {
     const { t } = useTranslation();
 
     return (
-        <View style={styles.fila}>
+        <View style={[styles.fila, bloqueado && { opacity: 0.4 }]}>
             {OPCIONES.map((valor) => (
                 <SelectorPill
                     key={valor}
                     etiqueta={t(`modos.${valor}`)}
                     activo={modo === valor}
-                    onPress={() => onCambiar(valor)}
+                    onPress={() => !bloqueado && onCambiar(valor)}
                 />
             ))}
         </View>

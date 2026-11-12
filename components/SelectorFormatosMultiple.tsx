@@ -9,12 +9,14 @@ type Props = {
     seleccionados: string[];
     onCambiar: (formatos: string[]) => void;
     maximo?: number;
+    bloqueado?: boolean;
 };
 
-export default function SelectorFormatosMultiple({ seleccionados, onCambiar, maximo = 3 }: Props) {
+export default function SelectorFormatosMultiple({ seleccionados, onCambiar, maximo = 3, bloqueado }: Props) {
     const { t } = useTranslation();
 
     function alternar(f: string) {
+        if (bloqueado) return;
         if (seleccionados.includes(f)) {
             onCambiar(seleccionados.filter((x) => x !== f));
         } else if (seleccionados.length < maximo) {
@@ -23,7 +25,7 @@ export default function SelectorFormatosMultiple({ seleccionados, onCambiar, max
     }
 
     return (
-        <View style={styles.contenedor}>
+        <View style={[styles.contenedor, bloqueado && { opacity: 0.4 }]}>
             <View style={styles.fila}>
                 {FORMATOS.map((f) => {
                     const activo = seleccionados.includes(f.valor);
