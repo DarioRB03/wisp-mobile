@@ -125,8 +125,8 @@ export async function enviarMotivoFeedback(id: string, motivo: string): Promise<
     if (!res.ok) throw new Error("No se pudo enviar el motivo");
 }
 
-export async function obtenerHistorial() {
-    const res = await apiFetch("/historial");
+export async function obtenerHistorial(offset = 0, limite = 20) {
+    const res = await apiFetch(`/historial?offset=${offset}&limite=${limite}`);
     if (!res.ok) throw new Error("No se pudo obtener el historial");
     return res.json();
 }

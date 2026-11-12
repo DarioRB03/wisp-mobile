@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ItemHistorial from "../components/ItemHistorial";
 import ModalNota from "../components/ModalNota";
 import SkeletonHistorial from "../components/SkeletonHistorial";
@@ -28,11 +28,15 @@ const FILTROS = [
     { valor: "email", etiqueta: "Email" },
 ];
 
+const LIMITE = 20;
+
 export default function Historial() {
     const { t, i18n } = useTranslation();
 
     const [notas, setNotas] = useState<Nota[]>([]);
     const [cargando, setCargando] = useState(true);
+    const [cargandoMas, setCargandoMas] = useState(false);
+    const [hayMas, setHayMas] = useState(true);
     const [error, setError] = useState("");
     const [seleccionada, setSeleccionada] = useState<Nota | null>(null);
     const [filtro, setFiltro] = useState("todos");
@@ -42,24 +46,42 @@ export default function Historial() {
         cargarHistorial();
     }, []);
 
+    function mapear(n: any): Nota {
+        return {
+            id: n.id,
+            texto: n.texto,
+            post: n.post,
+            formato: n.formato || "linkedin",
+            feedback: n.feedback ?? null,
+            motivo: n.motivo_feedback ?? null,
+            creado_en: n.creado_en,
+        };
+    }
+
     async function cargarHistorial() {
         setCargando(true);
+        setHayMas(true);
         try {
-            const datos = await obtenerHistorial();
-            const mapeadas: Nota[] = datos.map((n: any) => ({
-                id: n.id,
-                texto: n.texto,
-                post: n.post,
-                formato: n.formato || "linkedin",
-                feedback: n.feedback ?? null,
-                motivo: n.motivo_feedback ?? null,
-                creado_en: n.creado_en,
-            }));
-            setNotas(mapeadas);
+            const datos = await obtenerHistorial(0, LIMITE);
+            setNotas(datos.map(mapear));
+            setHayMas(datos.length === LIMITE);
         } catch (err) {
             setError(t("historial.errorCargar"));
         } finally {
             setCargando(false);
+        }
+    }
+
+    async function cargarMas() {
+        if (cargandoMas || !hayMas) return;
+        setCargandoMas(true);
+        try {
+            const datos = await obtenerHistorial(notas.length, LIMITE);
+            setNotas((prev) => [...prev, ...datos.map(mapear)]);
+            setHayMas(datos.length === LIMITE);
+        } catch {
+        } finally {
+            setCargandoMas(false);
         }
     }
 
@@ -142,6 +164,9 @@ export default function Historial() {
                         keyExtractor={(item) => item.id}
                         contentContainerStyle={{ padding: ESPACIADO.lg, gap: ESPACIADO.sm + 2, paddingBottom: 90 }}
                         ListEmptyComponent={<Text style={styles.vacio}>{t("historial.sinResultados")}</Text>}
+                        ListFooterComponent={cargandoMas ? <ActivityIndicator color={COLORES.accentCool} style={{ marginVertical: ESPACIADO.lg }} /> : null}
+                        onEndReached={filtro === "todos" ? cargarMas : undefined}
+                        onEndReachedThreshold={0.3}
                         renderItem={({ item }) => (
                             <ItemHistorial
                                 formato={item.formato}

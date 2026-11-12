@@ -155,8 +155,8 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback, onAnot
 
 const styles = StyleSheet.create({
     fondo: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "flex-end" },
-    caja: { backgroundColor: COLORES.surface, borderTopWidth: 1, borderTopColor: COLORES.border, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: ESPACIADO.lg, paddingTop: ESPACIADO.md },
-    postScroll: { maxHeight: Dimensions.get("window").height * 0.55 },
+    caja: { backgroundColor: COLORES.surface, borderTopWidth: 1, borderTopColor: COLORES.border, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: ESPACIADO.lg, paddingTop: ESPACIADO.md, maxHeight: Dimensions.get("window").height * 0.9 },
+    postScroll: { flexShrink: 1 },
     asa: { width: 36, height: 4, borderRadius: 2, backgroundColor: COLORES.border, alignSelf: "center", marginBottom: ESPACIADO.md },
     header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: ESPACIADO.md },
     headerIzq: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.xs + 2 },
