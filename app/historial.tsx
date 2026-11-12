@@ -43,8 +43,8 @@ export default function Historial() {
     const [orden, setOrden] = useState<"reciente" | "antiguo">("reciente");
 
     useEffect(() => {
-        cargarHistorial();
-    }, []);
+        cargarHistorial(filtro);
+    }, [filtro]);
 
     function mapear(n: any): Nota {
         return {
@@ -58,11 +58,13 @@ export default function Historial() {
         };
     }
 
-    async function cargarHistorial() {
+    async function cargarHistorial(fmt: string) {
         setCargando(true);
+        setNotas([]);
         setHayMas(true);
+        setError("");
         try {
-            const datos = await obtenerHistorial(0, LIMITE);
+            const datos = await obtenerHistorial(0, LIMITE, fmt === "todos" ? undefined : fmt);
             setNotas(datos.map(mapear));
             setHayMas(datos.length === LIMITE);
         } catch (err) {
@@ -76,7 +78,7 @@ export default function Historial() {
         if (cargandoMas || !hayMas) return;
         setCargandoMas(true);
         try {
-            const datos = await obtenerHistorial(notas.length, LIMITE);
+            const datos = await obtenerHistorial(notas.length, LIMITE, filtro === "todos" ? undefined : filtro);
             setNotas((prev) => [...prev, ...datos.map(mapear)]);
             setHayMas(datos.length === LIMITE);
         } catch {
@@ -154,18 +156,16 @@ export default function Historial() {
                         </View>
                     </View>
                     <FlatList
-                        data={notas
-                            .filter((n) => filtro === "todos" || n.formato === filtro)
-                            .sort((a, b) => {
-                                const diff = new Date(a.creado_en).getTime() - new Date(b.creado_en).getTime();
-                                return orden === "reciente" ? -diff : diff;
-                            })}
-                        extraData={[i18n.language, filtro, orden]}
+                        data={notas.sort((a, b) => {
+                            const diff = new Date(a.creado_en).getTime() - new Date(b.creado_en).getTime();
+                            return orden === "reciente" ? -diff : diff;
+                        })}
+                        extraData={[i18n.language, orden]}
                         keyExtractor={(item) => item.id}
                         contentContainerStyle={{ padding: ESPACIADO.lg, gap: ESPACIADO.sm + 2, paddingBottom: 90 }}
                         ListEmptyComponent={<Text style={styles.vacio}>{t("historial.sinResultados")}</Text>}
-                        ListFooterComponent={cargandoMas ? <ActivityIndicator color={COLORES.accentCool} style={{ marginVertical: ESPACIADO.lg }} /> : null}
-                        onEndReached={filtro === "todos" ? cargarMas : undefined}
+                        ListFooterComponent={cargandoMas ? <ActivityIndicator color={COLORES.accentCool} style={{ marginVertical: ESPACIADO.lg }} /> : undefined}
+                        onEndReached={cargarMas}
                         onEndReachedThreshold={0.3}
                         renderItem={({ item }) => (
                             <ItemHistorial

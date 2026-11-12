@@ -125,10 +125,16 @@ export async function enviarMotivoFeedback(id: string, motivo: string): Promise<
     if (!res.ok) throw new Error("No se pudo enviar el motivo");
 }
 
-export async function obtenerHistorial(offset = 0, limite = 20) {
-    const res = await apiFetch(`/historial?offset=${offset}&limite=${limite}`);
+export async function obtenerHistorial(offset = 0, limite = 20, formato?: string) {
+    const params = new URLSearchParams({ offset: String(offset), limite: String(limite) });
+    if (formato) params.set("formato", formato);
+    const res = await apiFetch(`/historial?${params}`);
     if (!res.ok) throw new Error("No se pudo obtener el historial");
     return res.json();
+}
+
+export async function registrarPushToken(token: string): Promise<void> {
+    await apiFetch("/notificaciones/token", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token }) });
 }
 
 export async function borrarNota(id: string): Promise<void> {

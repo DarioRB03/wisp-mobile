@@ -1,10 +1,42 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Platform, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
 import { COLORES } from "../constants/theme";
 import { inicializarI18n } from "../lib/i18n";
+import { registrarPushToken } from "../lib/api";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
+async function registrarParaNotificaciones() {
+  if (!Device.isDevice) return;
+  const { status: existente } = await Notifications.getPermissionsAsync();
+  let estado = existente;
+  if (existente !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    estado = status;
+  }
+  if (estado !== "granted") return;
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+    });
+  }
+  const token = (await Notifications.getExpoPushTokenAsync()).data;
+  await registrarPushToken(token).catch(() => {});
+}
 
 export default function RootLayout() {
   const [listo, setListo] = useState(false);
@@ -19,6 +51,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     inicializarI18n().then(() => setListo(true));
+    registrarParaNotificaciones();
   }, []);
 
   if (!listo || (!fontsCargadas && !errorFuentes)) {

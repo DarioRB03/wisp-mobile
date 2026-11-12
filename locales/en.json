@@ -27,7 +27,8 @@
         "editarPost": "Edit post",
         "editarConfirmar": "Done",
         "meGusta": "I liked this",
-        "noMeGusta": "Not for me"
+        "noMeGusta": "Not for me",
+        "compartir": "Share"
     },
     "auth": {
         "login": "Sign in",
@@ -58,6 +59,10 @@
         "confirmacionReenviada": "Confirmation email resent."
     },
     "onboarding": {
+        "titulo": "Getting started",
+        "paso1": "Set up your profile",
+        "paso2": "Generate your first post",
+        "paso3": "Your voice activates",
         "banner": "Help Wisp sound like you — tell it who you are and how you want to sound.",
         "completarPerfil": "Complete profile"
     },

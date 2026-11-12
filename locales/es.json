@@ -27,7 +27,8 @@
         "editarPost": "Editar post",
         "editarConfirmar": "Listo",
         "meGusta": "Me ha gustado",
-        "noMeGusta": "No me ha gustado"
+        "noMeGusta": "No me ha gustado",
+        "compartir": "Compartir"
     },
     "auth": {
         "login": "Inicia sesión",
@@ -58,6 +59,10 @@
         "confirmacionReenviada": "Correo de confirmación reenviado."
     },
     "onboarding": {
+        "titulo": "Primeros pasos",
+        "paso1": "Configura tu perfil",
+        "paso2": "Genera tu primer post",
+        "paso3": "Tu voz se activa",
         "banner": "Para que Wisp suene como tú, cuéntale quién eres y cómo quieres sonar.",
         "completarPerfil": "Completar perfil"
     },

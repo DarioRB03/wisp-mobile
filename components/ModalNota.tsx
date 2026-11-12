@@ -2,7 +2,7 @@ import * as Clipboard from "expo-clipboard";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Dimensions, Modal, ScrollView, Share, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS } from "../lib/destinos";
 import MotivoFeedback from "./FeedbackPost";
@@ -47,6 +47,10 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback, onAnot
         await Clipboard.setStringAsync(nota!.post);
         setCopiado(true);
         setTimeout(() => setCopiado(false), 1800);
+    }
+
+    async function compartir() {
+        try { await Share.share({ message: nota!.post }); } catch {}
     }
 
     async function borrar() {
@@ -134,6 +138,9 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback, onAnot
                     <View style={styles.filaBotones}>
                         <TouchableOpacity style={[styles.boton, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
                             <Text style={styles.botonTexto}>{copiado ? t("comun.copiado") : t("comun.copiarPost")}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.boton, { borderWidth: 1, borderColor: COLORES.border }]} onPress={compartir}>
+                            <Text style={[styles.botonTexto, { color: COLORES.textMuted }]}>{t("comun.compartir")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.boton, { borderWidth: 1, borderColor: COLORES.danger }]}

@@ -19,7 +19,7 @@ import { supabase } from "../lib/supabase";
 
 import TabBar from "../components/TabBar";
 import BannerBorrador from "../components/BannerBorrador";
-import BannerOnboarding from "../components/BannerOnboarding";
+import PasosBienvenida from "../components/PasosBienvenida";
 import CampoTono from "../components/CampoTono";
 import ContadorUso from "../components/ContadorUso";
 import Fade from "../components/Fade";
@@ -253,7 +253,7 @@ function PantallaPrincipal() {
 
         <ContadorUso uso={uso} />
 
-        <BannerOnboarding onAbrirPerfil={() => router.push("/perfil")} />
+        <PasosBienvenida onAbrirPerfil={() => router.push("/perfil")} />
 
         <SelectorModo
           modo={modo}

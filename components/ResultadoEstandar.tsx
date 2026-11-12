@@ -1,7 +1,7 @@
 import * as Clipboard from "expo-clipboard";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Share, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 import type { ExtraGuardado } from "../lib/api";
@@ -60,6 +60,10 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
         setTimeout(() => setCopiado(false), 1800);
     }
 
+    async function compartir() {
+        try { await Share.share({ message: postActivo }); } catch {}
+    }
+
     async function guardar(feedback?: "positivo" | "negativo") {
         setGuardado(true);
         const id = await onGuardar(postActivo, feedback, {
@@ -115,6 +119,10 @@ export default function ResultadoEstandar({ variantes, formato, onGuardar }: Pro
             <BotonConRebote style={[styles.boton, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
                 <Text style={styles.botonTexto}>{copiado ? t("comun.copiado") : t("comun.copiar")}</Text>
             </BotonConRebote>
+
+            <TouchableOpacity style={[styles.boton, { backgroundColor: "transparent", borderWidth: 1, borderColor: COLORES.border }]} onPress={compartir}>
+                <Text style={[styles.botonTexto, { color: COLORES.textMuted }]}>{t("comun.compartir")}</Text>
+            </TouchableOpacity>
 
             {destino && (
                 <TouchableOpacity
