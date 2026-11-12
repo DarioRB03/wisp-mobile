@@ -34,8 +34,12 @@ async function registrarParaNotificaciones() {
       importance: Notifications.AndroidImportance.MAX,
     });
   }
-  const token = (await Notifications.getExpoPushTokenAsync()).data;
-  await registrarPushToken(token).catch(() => {});
+  try {
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    await registrarPushToken(token).catch(() => {});
+  } catch {
+    // Falla silenciosamente en Expo Go o sin projectId configurado
+  }
 }
 
 export default function RootLayout() {
