@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Session } from "@supabase/supabase-js";
+import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,6 +19,7 @@ import { supabase } from "../lib/supabase";
 
 import TabBar from "../components/TabBar";
 import BannerBorrador from "../components/BannerBorrador";
+import BannerOnboarding from "../components/BannerOnboarding";
 import CampoTono from "../components/CampoTono";
 import ContadorUso from "../components/ContadorUso";
 import Fade from "../components/Fade";
@@ -90,6 +92,7 @@ export default function Index() {
 function PantallaPrincipal() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   const [modo, setModo] = useState<Modo>("estandar");
   const [formato, setFormato] = useState("linkedin");
@@ -224,13 +227,17 @@ function PantallaPrincipal() {
     generar(nivel, textoOriginal);
   }
 
-  async function guardar(post: string, formatoUsado: string = formato): Promise<string> {
+  async function guardar(post: string, feedback?: "positivo" | "negativo", extra?: import("../lib/api").ExtraGuardado, formatoUsado: string = formato): Promise<string> {
     try {
-      return await guardarPost(transcripcion, post, formatoUsado);
+      return await guardarPost(textoOriginal || transcripcion, post, formatoUsado, feedback, extra);
     } catch (err: any) {
       setError(err.message || t("generar.errorGuardar"));
       throw err;
     }
+  }
+
+  function guardarComparativa(post: string, formatoUsado: string) {
+    guardarPost(textoOriginal || transcripcion, post, formatoUsado).catch(() => {});
   }
 
   async function cerrarSesion() {
@@ -245,6 +252,8 @@ function PantallaPrincipal() {
         <Text style={[styles.subtitulo, { fontFamily: FUENTES.cuerpo }]}>{t("app.lema")}</Text>
 
         <ContadorUso uso={uso} />
+
+        <BannerOnboarding onAbrirPerfil={() => router.push("/perfil")} />
 
         <SelectorModo
           modo={modo}
@@ -303,19 +312,20 @@ function PantallaPrincipal() {
 
         {modo === "estandar" && variantes.length > 0 && (
           <Fade style={{ width: "100%" }}>
-            <ResultadoEstandar variantes={variantes} formato={formato} onGuardar={(post) => guardar(post, formato)} />
+            <ResultadoEstandar variantes={variantes} formato={formato} onGuardar={(post, fb, extra) => guardar(post, fb, extra, formato)} />
             <NivelBotones onPress={regenerarCon} />
           </Fade>
         )}
         {modo === "personalizado" && postSimple && (
           <Fade style={{ width: "100%" }}>
-            <ResultadoSimple post={postSimple} formato={formato} onGuardar={(post) => guardar(post, formato)} />
+            <ResultadoSimple post={postSimple} formato={formato} onGuardar={(post, fb, extra) => guardar(post, fb, extra, formato)} />
             <NivelBotones onPress={regenerarCon} />
           </Fade>
         )}
         {modo === "comparativa" && comparativa.length > 0 && (
           <Fade style={{ width: "100%" }}>
-            <ResultadoComparativa resultados={comparativa} onGuardar={(post, f) => guardar(post, f)} />
+            <ResultadoComparativa resultados={comparativa} onGuardar={guardarComparativa} />
+            <NivelBotones onPress={regenerarCon} />
           </Fade>
         )}
       </View>

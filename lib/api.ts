@@ -37,7 +37,7 @@ export type EstadoFicha = {
     minimo_notas: number;
     actualizada_en: string | null;
 };
-export type ExtraGuardado = { motivo?: string; tono?: string; esOriginal?: boolean };
+export type ExtraGuardado = { postGenerado?: string; tono?: string };
 
 export async function transcribirAudio(uri: string): Promise<string> {
     const token = await obtenerToken();

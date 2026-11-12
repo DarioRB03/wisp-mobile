@@ -6,33 +6,30 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS, copiarYAbrir, etiquetaDestino } from "../lib/destinos";
 import BotonConRebote from "./BotonConRebote";
-import FeedbackPost from "./FeedbackPost";
 
 type Item = { formato: string; post: string };
 
 type Props = {
     resultados: Item[];
-    onGuardar: (post: string, formato: string) => Promise<string>;
+    onGuardar: (post: string, formato: string) => void;
 };
 
-function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post: string, formato: string) => Promise<string> }) {
+function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post: string, formato: string) => void }) {
     const { t } = useTranslation();
     const [guardado, setGuardado] = useState(false);
     const [copiado, setCopiado] = useState(false);
-    const [postId, setPostId] = useState<string | null>(null);
 
     const destino = DESTINOS[item.formato];
-
-    async function guardar() {
-        const id = await onGuardar(item.post, item.formato);
-        setGuardado(true);
-        setPostId(id);
-    }
 
     async function copiar() {
         await Clipboard.setStringAsync(item.post);
         setCopiado(true);
         setTimeout(() => setCopiado(false), 1800);
+    }
+
+    function guardar() {
+        onGuardar(item.post, item.formato);
+        setGuardado(true);
     }
 
     return (
@@ -62,14 +59,19 @@ function TarjetaComparativa({ item, onGuardar }: { item: Item; onGuardar: (post:
             )}
 
             <BotonConRebote
-                style={[styles.botonPequeno, { backgroundColor: "transparent", borderWidth: 1, borderColor: COLORES.border, opacity: guardado ? 0.5 : 1 }]}
+                style={[styles.botonPequeno, {
+                    backgroundColor: "transparent",
+                    borderWidth: 1,
+                    borderColor: guardado ? COLORES.accentCool : COLORES.border,
+                    opacity: guardado ? 0.8 : 1,
+                }]}
                 onPress={guardar}
                 disabled={guardado}
             >
-                <Text style={[styles.botonTextoPequeno, { color: COLORES.textMuted }]}>{guardado ? t("comun.guardado") : t("comun.guardarHistorial")}</Text>
+                <Text style={[styles.botonTextoPequeno, { color: guardado ? COLORES.accentCool : COLORES.textMuted }]}>
+                    {guardado ? t("comun.guardado") : t("comun.guardarHistorial")}
+                </Text>
             </BotonConRebote>
-
-            <FeedbackPost postId={postId} />
         </View>
     );
 }
