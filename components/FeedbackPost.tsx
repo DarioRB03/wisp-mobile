@@ -8,17 +8,19 @@ const MOTIVOS = ["no_suena_a_mi", "demasiado_formal", "demasiado_largo", "invent
 
 type Props = {
     notaId: string;
-    onOmitir: () => void;
+    onOmitir?: () => void;
+    onEnviado?: (motivo: string) => void;
 };
 
-export default function MotivoFeedback({ notaId, onOmitir }: Props) {
+export default function MotivoFeedback({ notaId, onOmitir, onEnviado }: Props) {
     const { t } = useTranslation();
     const [listo, setListo] = useState(false);
 
     async function seleccionar(motivo: string) {
         try { await enviarMotivoFeedback(notaId, motivo); } catch {}
+        onEnviado?.(motivo);
         setListo(true);
-        setTimeout(onOmitir, 1200);
+        if (onOmitir) setTimeout(onOmitir, 1200);
     }
 
     if (listo) {

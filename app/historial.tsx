@@ -14,6 +14,7 @@ type Nota = {
     post: string;
     formato: string;
     feedback: string | null;
+    motivo: string | null;
     creado_en: string;
 };
 
@@ -44,8 +45,17 @@ export default function Historial() {
     async function cargarHistorial() {
         setCargando(true);
         try {
-            const datos: Nota[] = await obtenerHistorial();
-            setNotas(datos);
+            const datos = await obtenerHistorial();
+            const mapeadas: Nota[] = datos.map((n: any) => ({
+                id: n.id,
+                texto: n.texto,
+                post: n.post,
+                formato: n.formato || "linkedin",
+                feedback: n.feedback ?? null,
+                motivo: n.motivo_feedback ?? null,
+                creado_en: n.creado_en,
+            }));
+            setNotas(mapeadas);
         } catch (err) {
             setError(t("historial.errorCargar"));
         } finally {
@@ -70,7 +80,14 @@ export default function Historial() {
 
     async function manejarFeedback(id: string, valor: "positivo" | "negativo") {
         await enviarFeedback(id, valor);
-        setNotas((prev) => prev.map((n) => (n.id === id ? { ...n, feedback: valor } : n)));
+        const cambio = { feedback: valor, motivo: null };
+        setNotas((prev) => prev.map((n) => (n.id === id ? { ...n, ...cambio } : n)));
+        setSeleccionada((prev) => (prev ? { ...prev, ...cambio } : prev));
+    }
+
+    function anotarMotivo(id: string, motivo: string) {
+        setNotas((prev) => prev.map((n) => (n.id === id ? { ...n, motivo } : n)));
+        setSeleccionada((prev) => (prev ? { ...prev, motivo } : prev));
     }
 
     return (
@@ -143,6 +160,7 @@ export default function Historial() {
                 onCerrar={() => setSeleccionada(null)}
                 onBorrar={manejarBorrar}
                 onFeedback={manejarFeedback}
+                onAnotarMotivo={anotarMotivo}
             />
             <TabBar />
         </View>

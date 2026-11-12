@@ -5,12 +5,14 @@ import { useTranslation } from "react-i18next";
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { DESTINOS } from "../lib/destinos";
+import MotivoFeedback from "./FeedbackPost";
 
 type Nota = {
     id: string;
     post: string;
     formato: string;
     feedback: string | null;
+    motivo?: string | null;
     fecha: string;
 };
 
@@ -19,23 +21,27 @@ type Props = {
     onCerrar: () => void;
     onBorrar: (id: string) => Promise<void>;
     onFeedback: (id: string, valor: "positivo" | "negativo") => Promise<void>;
+    onAnotarMotivo?: (id: string, motivo: string) => void;
 };
 
-export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Props) {
+export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback, onAnotarMotivo }: Props) {
     const { t } = useTranslation();
     const [copiado, setCopiado] = useState(false);
     const [borrando, setBorrando] = useState(false);
     const [feedbackLocal, setFeedbackLocal] = useState<string | null>(null);
+    const [motivoLocal, setMotivoLocal] = useState<string | null | undefined>(null);
 
     useEffect(() => {
         setCopiado(false);
         setBorrando(false);
         setFeedbackLocal(null);
+        setMotivoLocal(nota?.motivo ?? null);
     }, [nota?.id]);
 
     if (!nota) return null;
 
     const feedbackActual = feedbackLocal !== null ? feedbackLocal : nota.feedback;
+    const motivoActual = motivoLocal !== null ? motivoLocal : (nota.motivo ?? null);
 
     async function copiar() {
         await Clipboard.setStringAsync(nota!.post);
@@ -55,6 +61,7 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
 
     async function marcarFeedback(valor: "positivo" | "negativo") {
         setFeedbackLocal(valor);
+        setMotivoLocal(null);
         try {
             await onFeedback(nota!.id, valor);
         } catch (err) {
@@ -108,6 +115,22 @@ export default function ModalNota({ nota, onCerrar, onBorrar, onFeedback }: Prop
                         </TouchableOpacity>
                     </View>
 
+                    {feedbackActual === "negativo" && (
+                        <View style={{ marginTop: ESPACIADO.sm }}>
+                            {motivoActual ? (
+                                <Text style={styles.motivoTexto}>
+                                    {t("feedback.motivoEtiqueta")}: {t(`feedback.motivo_${motivoActual}`, { defaultValue: motivoActual })}
+                                </Text>
+                            ) : (
+                                <MotivoFeedback
+                                    key={nota.id}
+                                    notaId={nota.id}
+                                    onEnviado={(m) => { setMotivoLocal(m); onAnotarMotivo?.(nota.id, m); }}
+                                />
+                            )}
+                        </View>
+                    )}
+
                     <View style={styles.filaBotones}>
                         <TouchableOpacity style={[styles.boton, { backgroundColor: COLORES.accentCool }]} onPress={copiar}>
                             <Text style={styles.botonTexto}>{copiado ? t("comun.copiado") : t("comun.copiarPost")}</Text>
@@ -143,6 +166,7 @@ const styles = StyleSheet.create({
     filaFeedback: { flexDirection: "row", alignItems: "center", gap: ESPACIADO.xs + 2, marginTop: ESPACIADO.md, flexWrap: "wrap" },
     pregunta: { color: COLORES.textMuted, fontFamily: FUENTES.mono, fontSize: TIPOGRAFIA.minimo, marginRight: ESPACIADO.xs },
     chip: { borderWidth: 1, borderColor: COLORES.border, borderRadius: RADIOS.full, paddingHorizontal: ESPACIADO.sm + 2, paddingVertical: ESPACIADO.xs },
+    motivoTexto: { color: COLORES.textMuted, fontFamily: FUENTES.cuerpo, fontSize: TIPOGRAFIA.minimo + 1 },
     filaBotones: { flexDirection: "row", gap: ESPACIADO.sm, marginTop: ESPACIADO.md },
     boton: { flex: 1, borderRadius: RADIOS.sm, paddingVertical: ESPACIADO.sm + 2, alignItems: "center" },
     botonTexto: { color: "white", fontFamily: FUENTES.cuerpoNegro, fontSize: TIPOGRAFIA.pequeno },
