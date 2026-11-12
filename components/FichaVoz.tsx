@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Animated, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useRef } from "react";
 import { COLORES, ESPACIADO, FUENTES, RADIOS, TIPOGRAFIA } from "../constants/theme";
 import { obtenerFicha, regenerarFicha, type EstadoFicha, type FichaVoz as FichaVozType } from "../lib/api";
 
@@ -35,14 +36,40 @@ function Chips({ titulo, items }: { titulo: string; items: string[] }) {
     );
 }
 
+function SkeletonFicha() {
+    const pulso = useRef(new Animated.Value(0.35)).current;
+    useEffect(() => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(pulso, { toValue: 0.8, duration: 750, useNativeDriver: true }),
+                Animated.timing(pulso, { toValue: 0.35, duration: 750, useNativeDriver: true }),
+            ])
+        ).start();
+    }, []);
+    return (
+        <Animated.View style={[s.contenedor, { opacity: pulso }]}>
+            <View style={{ height: 10, width: 140, backgroundColor: COLORES.border, borderRadius: 4, marginBottom: ESPACIADO.md }} />
+            <View style={{ height: 10, width: "100%", backgroundColor: COLORES.border, borderRadius: 4, marginBottom: ESPACIADO.xs + 2 }} />
+            <View style={{ height: 10, width: "85%", backgroundColor: COLORES.border, borderRadius: 4, marginBottom: ESPACIADO.xs + 2 }} />
+            <View style={{ height: 10, width: "70%", backgroundColor: COLORES.border, borderRadius: 4, marginBottom: ESPACIADO.md }} />
+            <View style={{ flexDirection: "row", gap: ESPACIADO.xs, flexWrap: "wrap" }}>
+                {[80, 100, 60, 90].map((w, i) => (
+                    <View key={i} style={{ height: 22, width: w, backgroundColor: COLORES.border, borderRadius: 999 }} />
+                ))}
+            </View>
+        </Animated.View>
+    );
+}
+
 export default function FichaVoz() {
     const { t, i18n } = useTranslation();
     const [estado, setEstado] = useState<EstadoFicha | null>(null);
+    const [cargando, setCargando] = useState(true);
     const [regenerando, setRegenerando] = useState(false);
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        obtenerFicha().then(setEstado).catch(() => {});
+        obtenerFicha().then(setEstado).catch(() => {}).finally(() => setCargando(false));
     }, []);
 
     async function regenerar() {
@@ -58,6 +85,7 @@ export default function FichaVoz() {
         }
     }
 
+    if (cargando) return <SkeletonFicha />;
     if (!estado) return null;
 
     const puedeRegenerar = estado.num_notas >= estado.minimo_notas;

@@ -35,10 +35,10 @@ export default function Perfil() {
     const [estadoFicha, setEstadoFicha] = useState<EstadoFicha | null>(null);
 
     useEffect(() => {
-        Promise.all([
-            obtenerPerfil().then((raw) => setPerfil(parsearPerfil(raw))),
-            obtenerFicha().then(setEstadoFicha).catch(() => {}),
-        ]).finally(() => setCargando(false));
+        obtenerPerfil()
+            .then((raw) => setPerfil(parsearPerfil(raw)))
+            .finally(() => setCargando(false));
+        obtenerFicha().then(setEstadoFicha).catch(() => {});
     }, []);
 
     function set(campo: keyof Perfil, valor: string) {
