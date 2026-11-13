@@ -66,6 +66,22 @@
         "banner": "Help Wisp sound like you — tell it who you are and how you want to sound.",
         "completarPerfil": "Complete profile"
     },
+    "wizard": {
+        "paso1Num": "Step 1 of 3",
+        "paso2Num": "Step 2 of 3",
+        "paso3Num": "Step 3 of 3",
+        "paso1Titulo": "Tell Wisp who you are",
+        "paso1Desc": "Wisp personalizes every post with your profile. It only takes a minute.",
+        "paso2Titulo": "Speak. Wisp converts it.",
+        "paso2Desc": "Record or write your raw idea. Wisp transforms it into a post ready to publish.",
+        "paso2Sub": "Works with voice, text, or notes you already have.",
+        "paso3Titulo": "Your voice activates on its own",
+        "paso3Desc": "After 5 saved posts, Wisp analyzes how you write and generates a Voice Card — so every post sounds 100% like you.",
+        "siguiente": "Next →",
+        "empezar": "Start using Wisp!",
+        "omitir": "Skip for now",
+        "guardando": "Saving..."
+    },
     "modos": {
         "estandar": "Standard",
         "personalizado": "Custom tone",

@@ -19,7 +19,6 @@ import { supabase } from "../lib/supabase";
 
 import TabBar from "../components/TabBar";
 import BannerBorrador from "../components/BannerBorrador";
-import PasosBienvenida from "../components/PasosBienvenida";
 import CampoTono from "../components/CampoTono";
 import ContadorUso from "../components/ContadorUso";
 import Fade from "../components/Fade";
@@ -62,11 +61,20 @@ function NivelBotones({ onPress }: { onPress: (nivel: "pulir" | "libre") => void
 export default function Index() {
   const [session, setSession] = useState<Session | null>(null);
   const [cargandoSesion, setCargandoSesion] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setCargandoSesion(false);
+      if (session) {
+        try {
+          const yaVio = await AsyncStorage.getItem("wisp_onboarding_done").catch(() => null);
+          if (!yaVio) {
+            router.replace("/onboarding");
+          }
+        } catch {}
+      }
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, nuevaSesion) => {
@@ -252,8 +260,6 @@ function PantallaPrincipal() {
         <Text style={[styles.subtitulo, { fontFamily: FUENTES.cuerpo }]}>{t("app.lema")}</Text>
 
         <ContadorUso uso={uso} />
-
-        <PasosBienvenida onAbrirPerfil={() => router.push("/perfil")} />
 
         <SelectorModo
           modo={modo}

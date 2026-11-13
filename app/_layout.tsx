@@ -1,7 +1,12 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Platform, View } from "react-native";
+import { ActivityIndicator, LogBox, Platform, View } from "react-native";
+
+LogBox.ignoreLogs([
+  "expo-notifications: Android Push notifications",
+  "`expo-notifications` functionality is not fully supported",
+]);
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";

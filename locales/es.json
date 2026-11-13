@@ -66,6 +66,22 @@
         "banner": "Para que Wisp suene como tú, cuéntale quién eres y cómo quieres sonar.",
         "completarPerfil": "Completar perfil"
     },
+    "wizard": {
+        "paso1Num": "Paso 1 de 3",
+        "paso2Num": "Paso 2 de 3",
+        "paso3Num": "Paso 3 de 3",
+        "paso1Titulo": "Cuéntale quién eres",
+        "paso1Desc": "Wisp personaliza cada post con tu perfil. Solo tarda un minuto.",
+        "paso2Titulo": "Habla. Wisp lo convierte.",
+        "paso2Desc": "Graba o escribe tu idea en bruto. Wisp la transforma en un post listo para publicar.",
+        "paso2Sub": "Funciona con voz, texto o notas que tengas ya.",
+        "paso3Titulo": "Tu voz se activa sola",
+        "paso3Desc": "Tras 5 posts guardados, Wisp analiza cómo escribes y genera una Ficha de Voz — para que cada post suene 100% a ti.",
+        "siguiente": "Siguiente →",
+        "empezar": "¡Empezar a usar Wisp!",
+        "omitir": "Omitir por ahora",
+        "guardando": "Guardando..."
+    },
     "modos": {
         "estandar": "Estándar",
         "personalizado": "Tono personalizado",
